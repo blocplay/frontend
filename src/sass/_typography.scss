@@ -1,0 +1,44 @@
+/* roboto-regular - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'),
+    url('../assets/fonts/roboto-v18-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../assets/fonts/roboto-v18-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+/* roboto-700 - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'),
+    url('../assets/fonts/roboto-v18-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-700.woff') format('woff'), /* Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../assets/fonts/roboto-v18-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+/* roboto-900 - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Roboto Black'), local('Roboto-Black'),
+    url('../assets/fonts/roboto-v18-latin-900.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-900.woff') format('woff'), /* Modern Browsers */
+    url('../assets/fonts/roboto-v18-latin-900.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../assets/fonts/roboto-v18-latin-900.ttf') format('truetype'), /* Safari, Android, iOS */
+}
+
+/* Avenir-400 - latin */
+@font-face {
+  font-family: 'Avenir';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Avenir'), local('Avenir'),
+    url('../assets/fonts/AvenirLTStd-Roman.woff') format('woff'), /* Modern Browsers */
+    url('../assets/fonts/AvenirLTStd-Roman.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../assets/fonts/AvenirLTStd-Roman.ttf') format('truetype'), /* Safari, Android, iOS */
+}

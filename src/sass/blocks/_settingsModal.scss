@@ -1,0 +1,33 @@
+.settingsModal__overlay {
+	opacity: 0;
+	transition: opacity 0.2s;
+	display: flex;
+	justify-content: flex-end;
+
+	// The following class name cannot be changed
+	&.ReactModal__Overlay--after-open {
+		opacity: 1;
+	}
+
+	&.ReactModal__Overlay--before-close {
+		opacity: 0;
+	}
+}
+
+.settingsModal__content {
+	flex: 0 0 320px;
+	height: 100%;
+	background-color: $white;
+	color: $off-black;
+	transform: translateX(200px);
+	transition: transform 0.3s;
+
+	// The following class name cannot be changed
+	.ReactModal__Overlay--after-open & {
+		transform: translateX(0);
+	}
+
+	.ReactModal__Overlay--before-close & {
+		transform: translateX(200px);
+	}
+}

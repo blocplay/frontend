@@ -1,0 +1,57 @@
+.appBar {
+	background-color: $light-cyan;
+	height: 67px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 $app-side-padding;
+}
+
+.appBar__pre,
+.appBar__post {
+	flex: 0 0 10%;
+}
+
+.appBar__pre-cancel {
+	background: transparent;
+	color: white;
+	@include icon($white);
+	display: flex;
+	align-items: center;
+	text-transform: uppercase;
+	font-size: 10px;
+	line-height: 1em;
+	padding: 20px 20px 20px 0; // Big click zone, else too small with touch
+	.icon {
+		width: 14px;
+		height: 14px;
+		margin-right: 8px;
+		position: relative;
+		// nudge
+		top: -1px;
+		svg {
+			width: 14px;
+			height: 14px;
+		}
+	}
+}
+
+.appBar__post {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.appBar__title {
+	display: flex;
+	justify-content: center;
+	flex: 1;
+}
+
+.appBar__logo {
+	height: 47px;
+}
+
+.appBar__avatar {
+	width: 43px;
+	height: 43px;
+}

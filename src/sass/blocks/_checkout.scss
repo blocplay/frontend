@@ -1,0 +1,52 @@
+.checkout {
+  margin-bottom: 30px;
+  &__billing {
+    margin-top: 36px;
+    &-form {
+      margin: 0 16px;
+    }
+  }
+  &__payment {
+    margin-top: 36px;
+    &-form {
+      margin: 0 16px;
+    }
+  }
+  &__credit {
+    display: flex;
+    input[type='text'].credit-input {
+      width: 43px;
+      margin-right: 19px;
+    }
+    &-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    &-icons {
+      display: flex;
+      align-items: center;
+      > .icon {
+        fill: white;
+        width: 27px;
+        margin-right: 10px;
+      }
+    }
+  }
+  &__submit {
+    width: 350px;
+    margin: 0 auto;
+  }
+}
+
+.select-wrapper {
+  position: relative;
+  &:before {
+    content: '\25BC';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) translateY(-5px);
+    color: $cyan-placeholder;
+    font-size: 10px;
+  }
+}

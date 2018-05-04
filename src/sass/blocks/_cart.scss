@@ -1,0 +1,108 @@
+.cart {
+  padding-bottom: 30px;
+  &__title {
+    padding: 0 15px 0 11px;
+  }
+  &__summary {
+    border-bottom: 1px solid $med-cyan;
+    padding: 0 15px 15px 11px;
+  }
+  &__item {
+    background-color: $midnight;
+    padding: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+  }
+  &__meta {
+    display: flex;
+    align-items: flex-start;
+  }
+  &__thumb {
+    margin-right: 20px;
+    border-radius: 5px;
+    width: 43px;
+    height: 43px;
+    object-fit: cover;
+    object-position: top;
+  }
+  &__description {
+    display: flex;
+    flex-direction: column;
+  }
+  &__publisher {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 6px;
+  }
+  &__price {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 6px;
+    @include icon($yellow);
+    > .icon {
+      width: 15px;
+      margin-right: 5px;
+    }
+  }
+  &__tokens {
+    font-size: 27px;
+    font-weight: bold;
+    align-items: center;
+    .icon {
+      fill: $yellow;
+      width: 100%;
+    }
+  }
+  &__remove {
+    background: transparent;
+    color: $yellow;
+    border: 2px solid $yellow;
+    display: flex;
+    align-items: center;
+    padding: 6px 25px;
+    font-size: 9px;
+    line-height: 9px;
+    font-weight: 900;
+    margin-left: auto;
+    @include icon($yellow);
+    > .icon  {
+      width: 13px;
+      margin-right: 4px;
+    }
+  }
+  &__total {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-weight: 900;
+    &-text {
+      color: $yellow;
+      text-transform: uppercase;
+      font-size: 18px;
+      margin-right: 12px;
+    }
+    &-number {
+      font-size: 40px;
+    }
+  }
+  &__disclaimer {
+    padding-top: 15px;
+    text-align: center;
+    width: 360px;
+    font-size: 14px;
+    opacity: 0.7;
+    margin: 0 auto;
+    line-height: 1.8em;
+  }
+  &__empty {
+    padding-top: 15px;
+    text-align: center;
+    width: 360px;
+    font-size: 14px;
+    opacity: 0.7;
+    margin: 0 auto;
+    line-height: 1.8em;
+  }
+}

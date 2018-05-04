@@ -1,0 +1,33 @@
+// Colors
+$white: #fff; // Primary
+$med-grey: #62676B; // Active text on top of $dark-grey, message placeholder
+$med-grey-inactive: #3B4248;//App tabs inactive text on top o
+$compose-input: #20272E; // Bg for compose
+$dark-grey: #141B23; // Bottom app tabs
+$off-black: #12161A; // Input bg
+
+
+$midnight: #0C202C; //card backgrounds
+$dark-cyan: #102937; // Global bg
+$med-cyan: #203946; // Tab bar, messages, progress bar backgrounds
+$med-cyan-text: #546F7D; // Inactive state on top of $med-cyan (section tabs)
+$cyan-placeholder: #4D6A88; // For login/register forms only
+$light-cyan: #028A93; // Top app bar
+$bright: #1ACBC8; // Progress bars, logo
+$yellow: #CBC21A; // Accent bg, buttons, contract
+$yellow-tab-text: #797316; // Text on active section tab
+$dark-yellow: #504C02; // Text on yellow bg
+
+$bronze: #F5A623;
+$silver: #D4D4D4;
+$gold: #F8E71C;
+
+$live: #D0021B;
+$online: #7ED321;
+
+// Fonts
+$base-font: 'Roboto', sans-serif;
+
+// metrics
+$sidebar-width: 376px;
+$app-side-padding: 16px;

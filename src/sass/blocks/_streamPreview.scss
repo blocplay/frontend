@@ -1,0 +1,39 @@
+.streamPreview {
+  width: 402px;
+  &__details {
+    margin-top: 20px;
+  }
+  &__publisher {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 10px;
+  }
+  &__poster {
+    @include icon($white);
+    @include aspect-ratio(402, 200, '.streamPreview__image');
+    cursor: pointer;
+    .icon {
+      position: absolute;
+      bottom: 5px;
+      left: 7px;
+      z-index: 1;
+      & svg {
+        height: 40px;
+      }
+    }
+    &:after {
+      content: '';
+      width: 75%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: linear-gradient(to right, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.41) 40%, rgba(0,0,0,0) 100%);
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,10 @@
+.sectionTabs {
+	background-color: $med-cyan;
+	display: flex;
+	justify-content: space-around;
+	padding: 0 $app-side-padding;
+}
+
+.sectionTabs__tab {
+	flex: 1;
+}

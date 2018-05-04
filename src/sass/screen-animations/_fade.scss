@@ -1,0 +1,21 @@
+/**
+ * Simple fade-in / fade-out
+ */
+.screenAnimation__fade {
+	.screenAnimation-enter {
+		transition: opacity 1s;
+		opacity: 0;
+	}
+
+	.screenAnimation-enter-active {
+		opacity: 1;
+	}
+	.screenAnimation-exit {
+		transition: opacity 1s;
+		opacity: 1;
+	}
+
+	.screenAnimation-exit-active {
+		opacity: 0;
+	}
+}

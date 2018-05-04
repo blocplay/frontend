@@ -1,0 +1,45 @@
+@mixin icon($fill: $white, $hoverfill: $fill) {
+  & > .icon {
+    fill: $fill;
+    &:hover {
+      fill: $hoverfill
+    }
+  }
+}
+
+@mixin aspect-ratio($width: 1, $height: 1, $selector: '*', $combinator: '>') {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  #{$combinator} #{$selector} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+@mixin scroll-hide($direction: 'h') {
+  &::-webkit-scrollbar {
+    @if $direction == 'v' {
+      width: 0px;
+    }
+    @if $direction == 'h' {
+      height: 0px
+    }
+  }
+}
+
+@mixin scroll-style($bg: transparent, $pill-color: $bright) {
+  &::-webkit-scrollbar {
+    background: $bg
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $bright;
+  }
+}

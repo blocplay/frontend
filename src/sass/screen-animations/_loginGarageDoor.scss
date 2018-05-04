@@ -1,0 +1,37 @@
+/**
+ * Description: the "higher" screen will slide over the "lower" screen from the bottom when entering
+ * and leave to the bottom when leaving. The lower screen is not animated.
+ */
+.screenAnimation__loginGarageDoor {
+	// When the higher screen is entering
+	&--entering {
+		> .screenAnimation-enter {
+			transform: translateY(100%);
+			transition: all 0.8s;
+			z-index: 2;
+		}
+
+		> .screenAnimation-enter-active {
+			transform: translateY(0);
+		}
+
+		// No animation for exiting
+	}
+
+	// When the higher screen is leaving (the lower is entering)
+	&--leaving {
+		> .screenAnimation-exit {
+			transform: translateY(0);
+			transition: all 0.8s;
+			// We delay a little bit the transition to allow the browser to render the next screen
+			transition-delay: 0.8s;
+			z-index: 2;
+		}
+
+		> .screenAnimation-exit-active {
+			transform: translateY(100%);
+		}
+
+		// No animation for entering
+	}
+}

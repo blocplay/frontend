@@ -1,0 +1,26 @@
+.screenGroupWelcome {
+	background-image: url('../assets/images/block-pattern-tablet.svg'), linear-gradient(180deg, #174660 0%, #102937 100%), ;
+	background-position: center bottom, center center;
+	background-size: contain, auto;
+	background-repeat: no-repeat, no-repeat;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100vh;
+	overflow-y: scroll;
+	@include scroll-hide('v')
+}
+
+.screenGroupWelcome__header {
+	margin-top: 100px;
+}
+
+.screenGroupWelcome__logo {
+	width: 131px;
+	height: 84px;
+}
+
+.screenGroupWelcome__content {
+	width: 231px;
+	margin-top: 61px;
+}

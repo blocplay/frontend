@@ -1,0 +1,30 @@
+.conversation {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.conversation__recipients {
+	padding: 9px;
+	border-bottom: 1px solid $med-cyan;
+	&-box {
+		width: 100%;
+    background-color: $off-black;
+    padding: 16px 10px;
+		border-radius: 3px;
+		color: $med-grey;
+	}
+}
+
+.conversation__history {
+	flex: 1;
+}
+
+.conversation__prompt {
+	display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.5;
+	flex: 1;
+}

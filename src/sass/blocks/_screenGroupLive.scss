@@ -1,0 +1,11 @@
+.screenGroupLive {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+
+	&__content {
+		flex: 1;
+		flex-direction: column;
+		display: flex;
+	}
+}

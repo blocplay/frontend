@@ -1,0 +1,79 @@
+.conversationMessage {
+	display: flex;
+	&--mine {
+		flex-direction: row-reverse;
+	}
+}
+
+.conversationMessage__avatar {
+	flex: 0 0 43px;
+	height: 43px;
+
+	.conversationMessage--their & {
+		margin-right: 15px;
+	}
+
+	.conversationMessage--mine & {
+		margin-left: 15px;
+	}
+}
+
+.conversationMessage__content {
+	padding: 12px;
+	flex: 1;
+	$br: 3px;
+	$triangle-width: 17px;
+	$triangle-height: 14px;
+	position: relative;
+
+	.conversationMessage--their & {
+		background-color: $med-cyan;
+		color: $white;
+		border-radius: 0 $br $br $br;
+		.conversationMessage__datetime {
+			opacity: 0.3;
+		}
+		&:before {
+			content: '';
+			position: absolute;
+			width: 0px;
+			height: 0px;
+			top: 0;
+			left: 4px;
+			transform: translateX(-100%);
+			border-width: 0px $triangle-width $triangle-height 0;
+			border-color: transparent $med-cyan transparent transparent;
+			border-style: solid;
+		}
+	}
+
+	.conversationMessage--mine & {
+		background-color: $yellow;
+		color: $dark-yellow;
+		border-radius: $br 0 $br $br;
+		.conversationMessage__datetime {
+			opacity: 0.6;
+		}
+		&:before {
+			content: '';
+			position: absolute;
+			width: 0px;
+			height: 0px;
+			top: 0;
+			right: 4px;
+			transform: translateX(100%);
+			border-width: $triangle-height $triangle-width 0 0;
+			border-color: $yellow transparent transparent transparent;
+			border-style: solid;
+		}
+	}
+}
+
+.conversationMessage__text {
+	line-height: 1.5em;
+	font-size: 14px;
+}
+.conversationMessage__datetime {
+	margin-top: 16px;
+	font-size: 10px;
+}

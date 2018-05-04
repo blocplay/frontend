@@ -1,0 +1,10 @@
+input {
+  width: 100%;
+  color: $white;
+  background-color: $off-black;
+  padding: 16px 11px 18px;
+  border-radius: 3px;
+  &::placeholder {
+    color: $med-grey
+  }
+}

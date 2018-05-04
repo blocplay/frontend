@@ -1,0 +1,25 @@
+.progressBar {
+  width: 100%;
+  // &__container {
+  //   &--text {
+  //     margin-bottom: 50px;
+  //     .profilePreview__trophies & {
+  //       margin-bottom:
+  //     }
+  //   }
+  // }
+  &::-webkit-meter-bar {
+    background: $med-cyan;
+    border-radius: 999px;
+    height: 9px;
+    width: 100%;
+  }
+  &::-webkit-meter-optimum-value {
+    background: $bright;
+    border-radius: 999px;
+  }
+  &__text {
+    font-size: 18px;
+    color: $bright;
+  }
+}

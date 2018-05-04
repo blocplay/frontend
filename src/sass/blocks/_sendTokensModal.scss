@@ -1,0 +1,70 @@
+// If modifying the transition durations, do not forget to also update the closeTimeoutMS prop in
+// <PanelModal> (for the closing animation only)
+
+.sendTokensModal__overlay {
+	opacity: 0;
+	transition: opacity 0.2s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	// The following class name cannot be changed
+	&.ReactModal__Overlay--after-open {
+		opacity: 1;
+	}
+
+	&.ReactModal__Overlay--before-close {
+		opacity: 0;
+	}
+}
+
+.sendTokensModal {
+	&__title {
+		font-size: 20px;
+	}
+	&__content {
+		width: 355px;
+		// TODO: change me if conversion removed?
+		height: 265px;
+		background-color: $med-cyan;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&__wrapper {
+		padding: 40px 0;
+		width: 230px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100%;
+		justify-content: space-between;
+	}
+	&__quantity-wrapper {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	&__quantity-control {
+		font-size: 20pt;
+		width: 42px;
+		height: 42px;
+		border: 2px solid $yellow;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		color: $yellow;
+	}
+	&__quantity-input {
+		font-size: 40pt;
+		padding: 0;
+		background: transparent;
+		text-align: center;
+	}
+	&__send {
+		width: 100%;
+	}
+}

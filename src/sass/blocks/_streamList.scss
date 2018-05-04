@@ -1,0 +1,47 @@
+.streamList {
+  padding-left: 16px;
+  // Accomodates swiper
+  width: 100%;
+  overflow: hidden;
+  &__container {
+    border-bottom: 1px solid $med-cyan;
+    margin: 26px 0 30px;
+    padding-bottom: 25px;
+  }
+  &__title {
+    font-family: 'Avenir';
+    display: flex;
+    align-items: center;
+    padding-bottom: 35px;
+    @include icon($yellow);
+    h2 {
+      font-size: 24px;
+      font-weight: 300;
+    }
+    > .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid $yellow;
+      margin-right: 20px;
+      // For centering the icon in the circle
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        height: 16px;
+      }
+    }
+  }
+  &__list {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  &__item {
+    flex: 0 0 402px;
+  }
+}
+
+// Classes for swiper lib

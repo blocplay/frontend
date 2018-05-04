@@ -1,0 +1,42 @@
+.gamePreviewModal {
+  display: flex;
+  padding: 22px 15px 0 10px;
+  &__poster {
+    @include aspect-ratio(208, 274, '.gamePreviewModal__image');
+    margin-right: 10px;
+    flex: 0 1 208px;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &__meta {
+    flex: 1;
+  }
+  &__header {
+    margin-bottom: 10px;
+  }
+  &__title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  &__view {
+    margin-top: 28px;
+  }
+  &__details {
+    font-size: 14px;
+    &-item {
+      padding: 16px;
+      border-bottom: 1px solid $med-cyan;
+      display: flex;
+      align-items: center;
+      @include icon($yellow);
+      > .icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+.communityPreview {
+  &__item {
+    display: flex;
+    border-bottom: 1px solid $med-cyan;
+    padding: 20px;
+  }
+  &__thumb {
+    flex: 0 0 78px;
+    height: 78px;
+    margin-right: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+    object-position: top;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &__tags {
+   display: flex;
+   list-style-type: none;
+  }
+  &__tag {
+    margin-right: 6px;
+    text-align: center;
+  }
+  &__member-count {
+    font-size: 12px;
+    opacity: 0.5;
+  }
+}

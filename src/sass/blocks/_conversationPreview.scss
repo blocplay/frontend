@@ -1,0 +1,67 @@
+.conversationPreview__front {
+	display: flex;
+	cursor: pointer;
+	align-items: center;
+	padding: 19px 10px;
+	background-color: $dark-cyan;
+
+	.conversationPreview--active & {
+		background-color: $light-cyan;
+	}
+}
+
+
+.conversationPreview__icon {
+	width: 43px;
+	height: 43px;
+	margin-right: 16px;
+}
+
+.conversationPreview__title {
+	flex: 1;
+}
+
+.conversationPreview__status {
+	font-size: 12px;
+	opacity: 0.5;
+	margin-top: 5px;
+}
+
+.conversationPreview__favourite {
+	@include icon($yellow);
+	> .icon {
+		width: 21px;
+	}
+}
+
+.swipeout-actions {
+	.swipeout-btn {
+		width: 81px;
+	}
+	.conversationPreview__action {
+		&-send {
+			background-color: $bright;
+			.icon {
+				fill: $med-cyan;
+			}
+		}
+		&-fav {
+			background-color: $yellow;
+			.icon {
+				fill: $dark-yellow;
+			}
+		}
+		&-delete {
+			background-color: $live;
+			.icon {
+				fill: white;
+				svg {
+					height: 18px;
+				}
+			}
+		}
+	}
+	.icon {
+		width: 18px;
+	}
+}

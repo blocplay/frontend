@@ -1,0 +1,31 @@
+.btn {
+  border-radius: 999px;
+  padding: 15px;
+  line-height: 19px;
+  font-size: 12px;
+  text-transform: uppercase;
+  &-yellow {
+    background-color: $yellow;
+    color: $dark-yellow;
+  }
+  &-outline {
+    color: $yellow;
+    border: 2px solid $yellow;
+    background: transparent;
+    padding: 13px;
+  }
+  &-dim {
+    background-color: $med-cyan;
+    color: $med-cyan-text;
+  }
+  &-link {
+    color: $yellow;
+    background: transparent;
+  }
+  &-sm {
+    font-size: 10px;
+    line-height: 10px;
+    padding: 8px 11px;
+    min-width: 84px;
+  }
+}

@@ -1,0 +1,16 @@
+.conversationHistory {
+	padding: 22px 16px;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	&__wrapper {
+		// Allows for scrolling flex-layout
+		flex: 1 1 auto;
+		overflow-y: auto;
+		height: 0px;
+	}
+	&__entry {
+		margin-bottom: 22px;
+	}
+}
+

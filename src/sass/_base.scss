@@ -1,0 +1,29 @@
+// Resets
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	box-sizing: border-box;
+	outline: none; // :(
+}
+
+input, textarea, select, button {
+	color: inherit;
+	font-size: inherit;
+	font-family: inherit;
+}
+
+// End resets
+
+body {
+	background-color: $dark-cyan;
+	color: $white;
+	font-size: 16px;
+	font-family: $base-font
+}
+
+a {
+	color: $yellow;
+}
+
+

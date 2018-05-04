@@ -1,0 +1,95 @@
+$self: '.friendsList';
+
+.friendsList {
+  &__list {
+    margin: 0 11px 0 24px;
+  }
+  &__post {
+    margin-left: auto;
+  }
+  &__flash {
+    border-bottom: 1px solid $med-cyan;
+  }
+  &__main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  &__title.streamList__title {
+    padding-bottom: 11px;
+    padding-top: 20px;
+    &.offline {
+      padding-top: 50px;
+    }
+  }
+  &__search {
+    margin: 0 13px;
+    padding: 13px 0;
+    border-bottom: 1px solid $med-cyan;
+  }
+}
+
+.homeFriends {
+  #{$self}__avatar {
+    margin-left: -10px;
+    margin-right: 20px;
+  }
+  #{$self}__status {
+    font-size: 30px;
+    &--online {
+      color: $online;
+    }
+    &--offline {
+      color: $med-cyan-text;
+    }
+  }
+}
+
+.invitations {
+  #{$self}__avatar {
+    margin-right: 20px;
+  }
+  #{$self}__post {
+    .icon-plus-circle {
+      fill: $white;
+      width: 16px;
+      margin-right: 10px;
+    }
+  }
+  &__actions {
+    display: flex;
+  }
+  &__action {
+    $dimension: 40px;
+    height: $dimension;
+    width: $dimension;
+    border-radius: 50%;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon {
+      fill: $white;
+      width: 20px;
+      height: 20px;
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+    &-accept {
+      background: $online;
+    }
+    &-reject {
+      background: $live;
+    }
+  }
+  &__none {
+    opacity: 0.5;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%)
+  }
+}

@@ -1,0 +1,22 @@
+.conversationCompose {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  @include icon($white);
+  background-color: $off-black;
+  .icon {
+    width: 16px;
+    height: 16px;
+    &-smile, &-paperclip {
+      margin-right: 16px;
+    }
+    &-paper-plane {
+      margin-left: 16px;
+    }
+  }
+  input {
+    background: $compose-input;
+    flex: 1 1;
+  }
+}

@@ -1,0 +1,122 @@
+.shop {
+  &__screen {
+    display: flex;
+		flex-direction: column;
+		flex: 1;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+    @include icon($bright);
+    > .icon {
+      width: 28px;
+      margin-right: 12px;
+    }
+  }
+  &__search-wrapper {
+    padding: 11px 14px;
+    border-bottom: 1px solid $med-cyan;
+  }
+  &__balance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px 0px;
+    margin: 0px 14px;
+    border-bottom: 1px solid $med-cyan;
+    font-size: 14px;
+    // TODO: revise margin-bottom after pagination added
+    margin-bottom: 15px;
+    &-current {
+      display: flex;
+      align-items: center;
+      @include icon($yellow);
+      > .icon {
+        width: 20px;
+        margin: 0 10px;
+      }
+    }
+  }
+  &__category {
+    &-item {
+      font-size: 14px;
+      border-bottom: 1px solid $med-cyan;
+      padding: 25px 30px 25px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @include icon($white);
+      > .icon {
+        width: 8px;
+      }
+    }
+  }
+}
+
+.shopItem {
+  $self: &;
+  &__poster {
+    @include aspect-ratio(402, 226, '.shopItem__image');
+    // TODO: add floor fade
+    &--fade {
+      &:after {
+        content: '';
+        width: 100%;
+        height: 70px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(to top, #000000 0%, rgba(0,0,0,0) 100%);
+      }
+    }
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &__price {
+    display: flex;
+    position: absolute;
+    bottom: 13px;
+    left: 14px;
+    align-items: center;
+    font-weight: 600;
+    z-index: 1;
+    @include icon($yellow);
+    > .icon {
+      width: 20px;
+      //height: 18px;
+      margin-right: 7px;
+    }
+  }
+  &__details {
+    background: $midnight;
+    padding: 15px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__subtitle {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 2px;
+  }
+  &__atc {
+    $diameter: 40px;
+    border-radius: 50%;
+    background-color: $yellow;
+    width: $diameter;
+    height: $diameter;
+    @include icon($dark-yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > .icon {
+      width: 18px;
+      // Nudge
+      position: relative;
+      top: 2px;
+    }
+  }
+}

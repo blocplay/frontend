@@ -1,0 +1,65 @@
+/**
+ * The "higher" screen will "push" the lower one. The higher enters (and "pushes") and leaves to the
+ * right, the lower enters and leaves to the left.
+ */
+.screenAnimation__lateralPush {
+	// When a "higher" screen (route) is entering
+	&--entering {
+		backface-visibility: hidden;
+
+		// The entering screen
+		> .screenAnimation-enter {
+			transform: translate3d(20px, 0, 0);
+			opacity: 0;
+			transition: all 0.5s;
+			z-index: 2;
+		}
+
+		> .screenAnimation-enter-active {
+			transform: translate3d(0, 0, 0);
+			opacity: 1;
+		}
+
+		// The leaving screen
+		> .screenAnimation-exit {
+			transform: translate3d(0, 0, 0);
+			transition: all 0.5s;
+			opacity: 1;
+			z-index: 1;
+		}
+
+		> .screenAnimation-exit-active {
+			transform: translate3d(-20px, 0, 0);
+			opacity: 0;
+		}
+	}
+
+	// When a "lower" screen (route) is entering (the higher is leaving)
+	&--leaving {
+		// The entering screen
+		> .screenAnimation-enter {
+			transform: translate3d(-20px, 0, 0);
+			opacity: 0;
+			transition: all 0.5s;
+			z-index: 2;
+		}
+
+		> .screenAnimation-enter-active {
+			transform: translate3d(0, 0, 0);
+			opacity: 1;
+		}
+
+		// The leaving screen
+		> .screenAnimation-exit {
+			transform: translate3d(0, 0, 0);
+			transition: all 0.5s;
+			z-index: 1;
+			opacity: 1;
+		}
+
+		> .screenAnimation-exit-active {
+			transform: translate3d(20px, 0, 0);
+			opacity: 0;
+		}
+	}
+}

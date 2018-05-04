@@ -1,0 +1,24 @@
+// Many of the styles youd expect here are covered in previewList
+.gameList {
+  $gutter: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(20px - #{$gutter});
+  margin-top: 36px;
+  margin-right: 16px;
+  &__poster-wrapper {
+    @include aspect-ratio(140px, 185px, 'img');
+    width: calc(25% - #{$gutter});
+    margin-left: $gutter;
+    margin-bottom: $gutter;
+    flex: 0 0 auto;
+    //TODO: bg color is temporary
+    background-color: $yellow + unquote('66');
+    cursor: pointer;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.appTab {
+	$block: &;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 75px;
+	align-items: center;
+	cursor: pointer;
+	color: $med-grey-inactive;
+	font-size: 9px;
+	text-transform: uppercase;
+	font-weight: 900;
+	@include icon($med-grey-inactive);
+	&--active {
+		$active-text: $med-grey; 
+		color: $active-text;
+		@include icon($active-text)
+	}
+	.icon, .icon svg {
+		height: 21px;
+		margin-bottom: 8px;
+	}
+}

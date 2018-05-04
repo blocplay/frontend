@@ -1,0 +1,27 @@
+.sectionTab {
+	$block: &;
+	$text: $med-cyan-text;
+	color: $text;
+	@include icon($text);
+	height: 75px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 9px;
+	text-transform: uppercase;
+	cursor: pointer;
+	font-weight: 900;
+	&--active {
+		$active-text: $yellow-tab-text; 
+		background-color: $yellow;
+		color: $active-text;
+		@include icon($active-text)
+	}
+	.icon {
+		margin-bottom: 2px;
+		svg {
+			height: 21px
+		}
+	}
+}

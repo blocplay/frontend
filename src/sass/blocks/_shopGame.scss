@@ -1,0 +1,140 @@
+// See _video.scss for player styles
+.shopGame {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  &__container {
+    flex: 1;
+    display: flex;
+  }
+  &__main {
+		flex: 1;
+		display: flex;
+    flex-direction: column;
+    .streamList__title {
+      margin-top: 27px;
+    }
+  }
+  &__sidebar {
+    flex: 0 0 374px;
+    display: flex;
+    flex-direction: column;
+    &-image {
+      width: 100%;
+      height: 358px;
+      object-fit: cover;
+      object-position: top;
+    }
+  }
+  &__rating {
+    display: flex;
+    @include icon($yellow);
+    margin-left: auto;
+    > .icon {
+      margin-right: 3px;
+      width: 20px;
+    }
+  }
+  &__meta {
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  &__flags {
+    display: flex;
+  }
+  &__flag {
+    margin-right: 5px;
+		flex: 0 0 37px;
+    height: 45px;
+  }
+  &__platforms {
+    display: flex;
+  }
+  &__platform {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $med-cyan-text;
+    font-size: 9px;
+    font-weight: 900;
+    @include icon($med-cyan-text);
+    margin-right: 10px;
+    width: 27px;
+    > .icon {
+      width: 15px;
+      margin-top: 3px;
+      &-apple {
+        width: 13px;
+      }
+    }
+    &-text {
+      margin-top: auto;
+    }
+  }
+  &__description {
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.7em;
+    p {
+      margin-bottom: 2.0em;
+    }
+  }
+  // See _video.scss for player styles
+  &__media-list {
+    margin: 0 16px;
+  }
+  &__media {
+    margin-bottom: 10px;
+  }
+  &__poster {
+    @include aspect-ratio(16, 9);
+    // Fix for Chromium
+    overflow: hidden;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &__purchase {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+    cursor: pointer;
+    &-button {
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12px;
+      @include icon($dark-yellow);
+      > .icon {
+        width: 20px;
+        margin: 0 5px 0 7px;
+      }
+      &-price {
+        font-weight: 900;
+        font-size: 15px;
+      }
+    }
+  }
+  &__subCategory {
+    margin-left: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  &__subCategoryGames {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__subCategoryGame {
+    width: calc(33.3333% - 15px);
+    margin: 0 15px 15px 0;
+
+    img {
+      display: block;
+      vertical-align: top;
+      width: 100%;
+    }
+  }
+}

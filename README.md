@@ -3,7 +3,6 @@ TokenPlay ElectronJS, React based Frontend
 
 The TokenPlay frontend is provided as part of our OpenSource initiative at BlocPlay Entertainment. This source code is released under the Apache2 license. We will update this source code when we see fit.
 
-# Contact
 If you would like more information on this system please contact [Vince McMullin](https://github.com/vamman), CTO.
 
 # Disclaimer

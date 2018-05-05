@@ -1,13 +1,26 @@
 # TokenPlay Frontend
 TokenPlay ElectronJS, React based Frontend
 
-The TokenPlay frontend is provided as part of our OpenSource initiative at BlocPlay Entertainment. This source code is released under the Apache2 license. We will update this source code as when we see fit.
+The TokenPlay frontend is provided as part of our OpenSource initiative at BlocPlay Entertainment. This source code is released under the Apache2 license. We will update this source code when we see fit.
+
+# Contact
+If you would like more information on this system please contact [Vince McMullin](https://github.com/vamman), CTO.
 
 # Disclaimer
 
 ## Alpha
 
 TokenPlay and all of its systems are under heavy active development and we strongly advise against using these systems in production at this time.
+
+# DApp
+
+The Decentralized App ("Dapp") consists of the following core components:
+- Home
+- Store
+- Messaging
+- Live Events
+- Profile
+- Wallet
 
 ## Alpha Interface
 ![TokenPlay Interface](screen/screen1.PNG)
@@ -16,6 +29,38 @@ TokenPlay and all of its systems are under heavy active development and we stron
 [TokenPlay Demo]http://demo.tokenplay.com
 
 The demo currently provided online is a "click through" demo which was seen at GDC 2018. It is a UI/UX demo featuring demo material only.
+
+# Technology Stack
+The technology stack includes the following:
+
+Client App
+- Node.js
+- ElectronJS (App Rendering/Logic Threading)
+- React (App Rendering)
+- Phoenix Framework (Messaging)
+- Bitraider Framework (Distribution, Downloading, Streaming)
+
+Developer App
+- Bitraider (Uploading, Distribution, Versoning, Streaming)
+- Elixir Web App (Developer Administrator)
+
+Server
+- eWallet Backend API (Account/Ledger/Transactions/Tracking)
+- Gamer API Backend (Store, Games, Stats)
+- EVM Backend (Payment processing via EVM. DEX, Fiat)
+
+Decentralized
+- Peer Swarm (DHT based Game Related Data)
+- IPFS Filesystem (Store Images, Avatars, Game Packages)
+
+Databases
+- Apache Cassandra (Players, Achievements, Stats)
+- Postgresql (Accounts, Transactions, Ledger)
+
+Third party web APIs
+- Twitch API (Streaming)
+- YouTube API (Streaming)
+- ESL API (eSports)
 
 # Development
 * Install node modules `yarn install`

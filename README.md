@@ -25,7 +25,7 @@ The Decentralized App ("Dapp") consists of the following core components:
 ![TokenPlay Interface](screen/screen1.PNG)
 
 # Online Demo
-[TokenPlay Demo]http://demo.tokenplay.com
+[TokenPlay Demo](http://demo.tokenplay.com)
 
 The demo currently provided online is a "click through" demo which was seen at GDC 2018. It is a UI/UX demo featuring demo material only.
 

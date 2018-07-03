@@ -4,8 +4,10 @@ import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx';
 import Screen from '../../../../components/screens/routes/welcome/Login';
 import UI from '../../../../app/UI';
+import Authentication from '../../../../app/Authentication';
+import ServerError from '../../../../app/Server/ServerError';
 
-@inject('ui')
+@inject('ui', 'auth')
 @observer
 class Login extends Component {
 	static propTypes = {
@@ -15,20 +17,29 @@ class Login extends Component {
 	@observable
 	working = false;
 
+	/**
+	 * Last error code when we tried to log in
+	 * @type {string|null}
+	 */
+	@observable
+	error = null;
+
 	componentWillMount() {
 		this.working = false;
 	}
 
-	/**
-	 * For the prototype, we fake a login delay. This will allow React to build the next screen
-	 * while we show "signing in..."
-	 */
-	handleLogin = () => {
+	handleLogin = (username, password) => {
 		if (!this.working) {
 			this.working = true;
-			window.setTimeout(() => {
-				this.props.ui.router.goTo('/dashboard/home/games');
-			}, 50);
+			const userAttributes = ['username', 'displayName', 'avatar'];
+			this.props.auth.login(username, password, userAttributes)
+				.then(() => {
+					this.props.ui.router.goTo('/dashboard/home/games');
+				})
+				.catch((e) => {
+					this.error = e instanceof ServerError ? e.code : ServerError.UNKNOWN_ERROR;
+					this.working = false;
+				});
 		}
 	};
 
@@ -41,9 +52,10 @@ class Login extends Component {
 	render() {
 		return (
 			<Screen
+				working={this.working}
+				error={this.error}
 				onLogin={this.handleLogin}
 				onCreateAccount={this.handleCreateAccount}
-				working={this.working}
 			/>
 		);
 	}
@@ -52,6 +64,7 @@ class Login extends Component {
 // Injected props
 Login.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
 };
 
 export default Login;

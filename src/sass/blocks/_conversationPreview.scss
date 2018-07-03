@@ -19,12 +19,14 @@
 
 .conversationPreview__title {
 	flex: 1;
+	font-weight: 500;
 }
 
 .conversationPreview__status {
 	font-size: 12px;
 	opacity: 0.5;
 	margin-top: 5px;
+	font-weight: normal;
 }
 
 .conversationPreview__favourite {

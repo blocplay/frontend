@@ -3,16 +3,17 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import Component from '../../../../components/screens/routes/home/Friends';
-import currentUser from '../../../../mock/currentUser';
 import PanelModal from '../../../../components/modals/PanelModal';
 import UI from '../../../../app/UI';
 import InvitationsModal from '../../../../components/user/InvitationsModal';
-import { getUserById } from '../../../../mock/sampleUsers';
-import { getUserStream } from '../../../../mock/live';
 import FullModal from '../../../../components/modals/FullModal';
 import UserProfileModal from '../../../user/UserProfileModal';
+import FriendRequestRepository from '../../../../app/Repositories/FriendRequestRepository';
+import Authentication from '../../../../app/Authentication';
+import SearchModal from '../../../user/SearchModal';
+import Config from '../../../../app/Config';
 
-@inject('ui')
+@inject('ui', 'auth', 'friendRequestRepository', 'config')
 @observer
 class Friends extends ReactComponent {
 	static propTypes = {
@@ -36,11 +37,25 @@ class Friends extends ReactComponent {
 	friendModalVisible = false;
 
 	@observable
+	searchModalVisible = false;
+
+	@observable
 	displayedUser = null;
+
+	@observable
+	loadingFriends = false;
+
+	/**
+	 * User reference, see README.md
+	 * @type {User}
+	 */
+	user;
 
 	componentWillMount() {
 		this.didMount = false;
-		this.updateFriendModal();
+		this.user = this.props.auth.getUser();
+		this.loadRequests();
+		this.loadFriends();
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -49,6 +64,26 @@ class Friends extends ReactComponent {
 
 	componentDidMount() {
 		this.didMount = true;
+		this.updateFriendModal();
+	}
+
+	loadRequests() {
+		/** @type {FriendRequestRepository} */
+		const repo = this.props.friendRequestRepository;
+		// Same attributes as the list, since they will be added there once accepted
+		const attributes = this.props.config.get('userAttributes.friendsList');
+		// For now, we force a reload (until we have the async update)
+		repo.loadAll(attributes, true);
+	}
+
+	loadFriends() {
+		this.loadingFriends = true;
+		const attributes = this.props.config.get('userAttributes.friendsList');
+		// For now, we force a reload (until we have the async update)
+		this.user.loadFriends(attributes, true)
+			.then(() => {
+				this.loadingFriends = false;
+			});
 	}
 
 	getFlashMessage() {
@@ -58,43 +93,57 @@ class Friends extends ReactComponent {
 			return null;
 		}
 
-		return `You have ${invitations.length} pending friend requests`;
+		return `${invitations.length} pending friend request${invitations.length > 1 ? 's' : ''}`;
 	}
 
 	updateFriendModal(props = this.props) {
 		const id = props.match.params.friend;
-		const user = getUserById(id);
 
-		if (!user) {
+		if (typeof id !== 'string') {
 			this.closeFriendModal();
 			return;
 		}
 
-		// We "fill" the stream to the mock user (only because of circular dep. in mocks)
-		user.stream = getUserStream(user);
-
-		this.displayedUser = user;
+		this.displayedUserId = id;
 		this.openFriendModal();
 	}
 
 	getInvitations() {
-		return currentUser.invitations;
+		/** @type {FriendRequestRepository} */
+		const repo = this.props.friendRequestRepository;
+		return repo.getFriendRequests();
 	}
 
 	closeInvitationsModal() {
 		this.invitationsModalVisible = false;
 	}
 
+	closeSearchModal() {
+		this.searchModalVisible = false;
+	}
+
 	openInvitationsModal() {
 		this.invitationsModalVisible = true;
+	}
+
+	openSearchModal() {
+		this.searchModalVisible = true;
 	}
 
 	handleFlashMessageClick = () => {
 		this.openInvitationsModal();
 	};
 
+	handleSearchClick = () => {
+		this.openSearchModal();
+	};
+
 	handleInvitationsModalClose = () => {
 		this.closeInvitationsModal();
+	};
+
+	handleSearchModalClose = () => {
+		this.closeSearchModal();
 	};
 
 	closeFriendModal() {
@@ -110,11 +159,11 @@ class Friends extends ReactComponent {
 	};
 
 	handleAcceptInvitation = (invitation) => {
-		currentUser.invitations.remove(invitation);
+		this.props.friendRequestRepository.accept(invitation);
 	};
 
 	handleRefuseInvitation = (invitation) => {
-		currentUser.invitations.remove(invitation);
+		this.props.friendRequestRepository.reject(invitation);
 	};
 
 	handleFriendClick = (friend) => {
@@ -155,16 +204,43 @@ class Friends extends ReactComponent {
 		);
 	}
 
-	renderFriendModal() {
+	renderSearchModal() {
 		// react-modal and react-hot-loader workaround
 		if (!this.didMount) {
 			return null;
 		}
 		// end workaround
 
+		const modalLocation = this.props.ui.getModalLocation('dashboard-0');
+
+		if (!modalLocation) {
+			return null;
+		}
+
+		return (
+			<PanelModal
+				isOpen={this.searchModalVisible}
+				parentSelector={() => modalLocation}
+				onRequestClose={this.handleSearchModalClose}
+			>
+				<SearchModal
+					onBack={this.handleSearchModalClose}
+				/>
+			</PanelModal>
+		);
+	}
+
+	renderFriendModal() {
+		// react-modal and react-hot-loader workaround
+		if (!this.didMount) {
+			return null;
+		}
+
+		// end workaround
+
 		const modalLocation = this.props.ui.getModalLocation('dashboard-1');
 
-		if (!modalLocation || !this.displayedUser) {
+		if (!modalLocation || !this.displayedUserId) {
 			return null;
 		}
 
@@ -175,7 +251,7 @@ class Friends extends ReactComponent {
 				onRequestClose={this.handleFriendModalClose}
 			>
 				<UserProfileModal
-					user={this.displayedUser}
+					userId={this.displayedUserId}
 					onBack={this.handleFriendModalClose}
 				/>
 			</FullModal>
@@ -186,13 +262,16 @@ class Friends extends ReactComponent {
 		return (
 			<Fragment>
 				<Component
-					friends={currentUser.friends}
+					friends={this.user.getFriends()}
+					loadingFriends={this.loadingFriends}
 					flashMessage={this.getFlashMessage()}
 					onFlashMessageClick={this.handleFlashMessageClick}
+					onSearchClick={this.handleSearchClick}
 					onFriendClick={this.handleFriendClick}
 				/>
 				{this.renderInvitationsModal()}
 				{this.renderFriendModal()}
+				{this.renderSearchModal()}
 			</Fragment>
 		);
 	}
@@ -201,6 +280,9 @@ class Friends extends ReactComponent {
 // Injected props
 Friends.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
+	friendRequestRepository: PropTypes.instanceOf(FriendRequestRepository).isRequired,
+	config: PropTypes.instanceOf(Config).isRequired,
 };
 
 export default Friends;

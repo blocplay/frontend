@@ -1,26 +1,31 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
-import numeral from 'numeral';
-import { omit } from 'underscore';
-import MockObject from '../../mock/MockObject';
+import omit from 'lodash/omit';
 import Icon from '../icons/Icon';
+import User from '../../app/User';
+import { formatWei } from '../../app/utils';
+import Loading from '../Loading';
 
 const propTypes = {
-	user: PropTypes.instanceOf(MockObject),
+	user: PropTypes.instanceOf(User),
+	loading: PropTypes.bool,
 	onAddTokensClick: PropTypes.func,
 	onClose: PropTypes.func,
+	onLogOut: PropTypes.func,
 };
 
 const defaultProps = {
 	user: null,
+	loading: false,
 	onAddTokensClick: null,
 	onClose: null,
+	onLogOut: null,
 };
 
-function AppSettings({ user, ...props }) {
+function AppSettings({ user, loading, ...props }) {
 	const modalProps = {
-		...omit(props, 'onClose', 'user', 'onAddTokensClick'),
+		...omit(props, ['onClose', 'user', 'onAddTokensClick', 'loading']),
 		ariaHideApp: false,
 		portalClassName: 'modal settingsModal',
 		overlayClassName: 'modal__overlay settingsModal__overlay',
@@ -30,28 +35,28 @@ function AppSettings({ user, ...props }) {
 
 	let userBlock = null;
 	let tokensBlock = null;
+	let loadingBlock = null;
 
-	if (user) {
+	if (loading) {
+		loadingBlock = <Loading size="small"/>;
+	}
+
+	if (!loading && user) {
 		userBlock = (
-			<div className="appSettings__user">
-				<div className="appSettings__user-text">
-					<div>{user.displayName}</div>
-					<div className="appSettings__user-alias">{user.username}</div>
-				</div>
-				<button onClick={props.onClose}>
-					<Icon icon="times" />
-				</button>
-			</div>
+			<Fragment>
+				<div>{user.displayName}</div>
+				<div className="appSettings__user-alias">{user.username}</div>
+			</Fragment>
 		);
 
 		tokensBlock = (
 			<div className="appSettings__balance">
 				<div className="shop__balance-current">
 					<Icon icon="tokenplay" />
-					<p>{numeral(user.tokenBalance).format('0,0')} Tokens Available</p>
+					<p>{formatWei(user.tokenBalance)} Tokens Available</p>
 				</div>
 				<div>
-					<button className="btn btn-sm btn-yellow" onClick={props.onAddTokensClick}>
+					<button className="btn btn-sm btn-yellow btn-bold" onClick={props.onAddTokensClick}>
 						Add
 					</button>
 				</div>
@@ -62,7 +67,15 @@ function AppSettings({ user, ...props }) {
 	return (
 		<ReactModal {...modalProps}>
 			<div className="appSettings">
-				{userBlock}
+				<div className="appSettings__user">
+					<div className="appSettings__user-text">
+						{loadingBlock}
+						{userBlock}
+					</div>
+					<button onClick={props.onClose}>
+						<Icon icon="times" />
+					</button>
+				</div>
 				{tokensBlock}
 				<div className="appSettings__item">
 					General Settings<Icon icon="chevron-right" />
@@ -87,6 +100,9 @@ function AppSettings({ user, ...props }) {
 				</div>
 				<div className="appSettings__item">
 					Info<Icon icon="chevron-right" />
+				</div>
+				<div className="appSettings__item" onClick={props.onLogOut}>
+					Logout
 				</div>
 			</div>
 		</ReactModal>

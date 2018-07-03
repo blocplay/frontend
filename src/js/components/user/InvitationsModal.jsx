@@ -4,14 +4,14 @@ import { observer, PropTypes as MobxPropTypes } from 'mobx-react';
 import AppBar from '../AppBar';
 import Back from '../appBar/Back';
 import ScrollableView from '../ScrollableView';
-import MockObject from '../../mock/MockObject';
 import UserListItem from './UserListItem';
 import Icon from '../icons/Icon';
+import FriendRequest from '../../app/FriendRequest';
 
 @observer
 class InvitationsModal extends Component {
 	static propTypes = {
-		invitations: MobxPropTypes.arrayOrObservableArrayOf(PropTypes.instanceOf(MockObject)),
+		invitations: MobxPropTypes.arrayOrObservableArrayOf(PropTypes.instanceOf(FriendRequest)),
 		onBack: PropTypes.func,
 		onAcceptInvitation: PropTypes.func,
 		onRefuseInvitation: PropTypes.func,

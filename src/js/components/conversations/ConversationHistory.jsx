@@ -1,40 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
-import MockObject from '../../mock/MockObject';
-import History from '../../mock/ConversationHistory';
+import { observer, PropTypes as PropTypesMobx } from 'mobx-react';
 import Message from './Message';
+import AbstractEvent from '../../app/ConversationEvent/AbstractEvent';
+import MessageEvent from '../../app/ConversationEvent/MessageEvent';
+import User from '../../app/User';
+import UserEventModel from '../../app/ConversationEvent/UserEvent';
+import UserEvent from '../../containers/conversations/UserEvent';
 
 @observer
 class ConversationHistory extends Component {
 	static propTypes = {
-		history: PropTypes.instanceOf(History).isRequired,
-		currentUser: PropTypes.instanceOf(MockObject).isRequired,
+		events: PropTypesMobx.observableArrayOf(PropTypes.instanceOf(AbstractEvent)).isRequired,
+		currentUser: PropTypes.instanceOf(User).isRequired,
 	};
 
 	static defaultProps = {};
 
-	/**
-	 * To be able to scroll to the end of the list when a new message is added, we keep a reference
-	 * to an element completely at the bottom
-	 * @type {Element}
-	 */
-	endOfListRef = null;
-
-	componentDidMount() {
-		this.scrollToBottom(false);
-	}
-
-	componentDidUpdate() {
-		this.scrollToBottom(true);
-	}
-
-	scrollToBottom(smooth = false) {
-		this.endOfListRef.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant' });
-	};
-
 	renderEmpty() {
-		if (this.props.history.entries.length > 0) {
+		if (this.props.events.length > 0) {
 			return null;
 		}
 
@@ -45,18 +29,26 @@ class ConversationHistory extends Component {
 
 	renderEntries() {
 		const entries = [];
-		this.props.history.entries.forEach((entry) => {
-			if (entry.type !== 'message') {
-				// eslint-disable-next-line no-console
-				console.warn('non message entry', entry);
-				return;
+		this.props.events.forEach((/** @type {AbstractEvent} */ event) => {
+			const key = event.id || event.ref;
+
+			// Message
+			if (event instanceof MessageEvent) {
+				entries.push((
+					<div className="conversationHistory__entry" key={key}>
+						<Message message={event.message} isCurrentUser={event.message.user === this.props.currentUser} />
+					</div>
+				));
 			}
 
-			entries.push((
-				<div className="conversationHistory__entry" key={entry.id}>
-					<Message entry={entry} isCurrentUser={entry.user === this.props.currentUser} />
-				</div>
-			));
+			// User event
+			if (event instanceof UserEventModel) {
+				entries.push((
+					<div className="conversationHistory__entry" key={key}>
+						<UserEvent event={event} />
+					</div>
+				));
+			}
 		});
 
 		return entries;
@@ -67,7 +59,6 @@ class ConversationHistory extends Component {
 			<div className="conversationHistory">
 				{ this.renderEmpty() }
 				{ this.renderEntries() }
-				<div ref={(n) => { this.endOfListRef = n; }} />
 			</div>
 		);
 	}

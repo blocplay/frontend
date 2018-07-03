@@ -56,6 +56,8 @@
       "error",
       { "props": false }
     ],
-    "react/forbid-prop-types": "off"
+    "react/forbid-prop-types": "off",
+    "prefer-destructuring": "off",
+    "react/no-unescaped-entities": "off"
   }
 }

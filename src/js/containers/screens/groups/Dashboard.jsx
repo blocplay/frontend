@@ -1,7 +1,7 @@
 import React, { Component as ReactComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { omit } from 'underscore';
+import omit from 'lodash/omit';
 import Component from '../../../components/screens/groups/Dashboard';
 import UI from '../../../app/UI';
 import SendTokensModalHandler from '../../tokens/SendTokensModalHandler';
@@ -27,7 +27,7 @@ class Dashboard extends ReactComponent {
 	};
 
 	render() {
-		const props = omit(this.props, 'children');
+		const props = omit(this.props, ['children']);
 		return (
 			<Fragment>
 				<Component

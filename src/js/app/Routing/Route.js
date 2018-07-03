@@ -1,4 +1,5 @@
-import { pick, extend } from 'underscore';
+import pick from 'lodash/pick';
+import merge from 'lodash/merge';
 import { matchPath } from 'react-router-dom';
 
 class Route {
@@ -19,7 +20,7 @@ class Route {
 	 * @param {object} params
 	 */
 	constructor(params = {}) {
-		extend(this, pick(params, 'path', 'component', 'exact', 'sensitive'));
+		merge(this, pick(params, ['path', 'component', 'exact', 'sensitive']));
 	}
 
 	/**
@@ -51,7 +52,7 @@ class Route {
 	 */
 	getRouterRouteProps() {
 		return {
-			...pick(this, 'component', 'exact', 'sensitive'),
+			...pick(this, ['component', 'exact', 'sensitive']),
 			path: this.getFullPath(),
 		};
 	}

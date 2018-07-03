@@ -37,7 +37,7 @@ function Comments(props) {
 				</div>
 				<div className="streamModal__content">
 					<ScrollableView>
-						<ConversationHistory history={props.stream.conversation.history} currentUser={props.currentUser} />
+						<ConversationHistory events={[]} currentUser={props.currentUser} />
 					</ScrollableView>
 					<MessageInput onMessage={props.onMessage} />
 				</div>

@@ -1,4 +1,5 @@
-import { sample, random } from 'underscore';
+import sample from 'lodash/sample';
+import random from 'lodash/random';
 import moment from 'moment';
 import MockObject from './MockObject';
 import ConversationHistory from './ConversationHistory';

@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import { observer, PropTypes as PropTypesMobx } from 'mobx-react';
-import MockObject from '../../mock/MockObject';
-import Item from './Item';
+import Item from '../../containers/cart/Item';
+import AbstractCartItem from '../../app/CartItem/AbstractCartItem';
+import { formatWei } from '../../app/utils';
 
 @observer
 class Summary extends Component {
 	static propTypes = {
-		items: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(MockObject)),
-		total: PropTypes.number,
+		items: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(AbstractCartItem)),
+		total: PropTypes.instanceOf(BigNumber),
 		showRemove: PropTypes.bool,
 		onRemove: PropTypes.func,
 	};
 
 	static defaultProps = {
 		items: [],
-		total: 0,
+		total: new BigNumber(0),
 		showRemove: false,
 		onRemove: null,
 	};
@@ -29,7 +31,7 @@ class Summary extends Component {
 	renderItems() {
 		return this.props.items.map(item => (
 			<Item
-				key={item.id}
+				key={item.ref}
 				item={item}
 				showRemove={this.props.showRemove}
 				onRemove={this.handleRemove(item)}
@@ -47,7 +49,7 @@ class Summary extends Component {
 							Total
 						</span>
 						<span className="cart__total-number">
-							{this.props.total}
+							{formatWei(this.props.total)}
 						</span>
 					</p>
 				</div>

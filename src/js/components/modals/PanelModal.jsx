@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
-import { omit } from 'underscore';
+import omit from 'lodash/omit';
 
 const propTypes = {
 	children: PropTypes.node,
@@ -13,7 +13,7 @@ const defaultProps = {
 
 function PanelModal(props) {
 	const modalProps = {
-		...omit(props, 'children'),
+		...omit(props, ['children']),
 		ariaHideApp: false,
 		portalClassName: 'modal panelModal',
 		overlayClassName: 'modal__overlay panelModal__overlay',

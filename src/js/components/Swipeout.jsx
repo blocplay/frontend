@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { omit } from 'underscore';
+import omit from 'lodash/omit';
 import SwipeoutBase from 'rc-swipeout';
 
 /**
@@ -20,7 +20,7 @@ class Swipeout extends Component {
 	}
 
 	render() {
-		const otherProps = omit(this.props, 'children');
+		const otherProps = omit(this.props, ['children']);
 		return (
 			<SwipeoutBase
 				ref={(n) => { this.ref = n; }}

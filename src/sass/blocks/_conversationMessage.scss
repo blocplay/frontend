@@ -70,9 +70,13 @@
 }
 
 .conversationMessage__text {
+	display: block;
 	line-height: 1.5em;
 	font-size: 14px;
+	font-family: inherit;
+	white-space: pre-wrap;
 }
+
 .conversationMessage__datetime {
 	margin-top: 16px;
 	font-size: 10px;

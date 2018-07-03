@@ -1,53 +1,64 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { pick } from 'underscore';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import AppBar from '../../../AppBar';
-import MockObject from '../../../../mock/MockObject';
 import ScrollableView from '../../../ScrollableView';
 import TeaserList from '../../../shop/TeaserList';
 import SectionTabs from '../../../navigation/SectionTabs';
-import Actions from '../../../appBar/Actions';
 import Icon from '../../../icons/Icon';
 import Back from '../../../appBar/Back';
-import Teaser from '../../../shop/Teaser';
+import TokensBalance from '../../../../containers/shop/TokensBalance';
+import AppBarCart from '../../../../containers/shop/AppBarCart';
+import Category from '../../../../app/EStore/Category';
+import Loading from '../../../Loading';
+
+const platformTabs = {
+	pc: {
+		id: 'pc',
+		icon: 'windows',
+		title: 'PC',
+	},
+	ios: {
+		id: 'ios',
+		icon: 'apple',
+		title: 'iOS',
+	},
+	android: {
+		id: 'android',
+		icon: 'android',
+		title: 'Android',
+	},
+};
 
 @observer
 class Index extends Component {
 	static propTypes = {
-		user: PropTypes.instanceOf(MockObject).isRequired,
-		currentCategory: PropTypes.object,
-		featuredGames: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
-		latestGames: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
-		latestContent: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
-		categories: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
-		isCartEmpty: PropTypes.bool,
-		onTokensAdd: PropTypes.func,
+		currentCategory: PropTypes.instanceOf(Category),
+		loading: PropTypes.bool,
+		isFrontPage: PropTypes.bool,
 		onGameClick: PropTypes.func,
 		onAddGameToCart: PropTypes.func,
 		onCartClick: PropTypes.func,
 		onCategoryClick: PropTypes.func,
 		onBack: PropTypes.func,
+		onCartItemAdded: PropTypes.func,
 	};
 	static defaultProps = {
 		currentCategory: null,
-		featuredGames: [],
-		latestGames: [],
-		latestContent: [],
-		categories: [],
-		isCartEmpty: true,
-		onTokensAdd: null,
+		loading: false,
+		isFrontPage: true,
 		onGameClick: null,
 		onAddGameToCart: null,
 		onCartClick: null,
 		onCategoryClick: null,
 		onBack: null,
+		onCartItemAdded: null,
 	};
 
 	/**
-	 * Current visible "Categories" platform tab
-	 * @type {null}
+	 * Current visible "Categories" platform tab.
+	 * @type {object|null}
 	 */
 	@observable
 	currentCategoryTab = null;
@@ -60,18 +71,29 @@ class Index extends Component {
 	scrollableViewTopNode = null;
 
 	componentWillMount() {
-		// eslint-disable-next-line prefer-destructuring
-		this.currentCategoryTab = this.props.categories[0];
+		this.resetSubCategoryTab(this.props.currentCategory);
 	}
 
 	componentWillReceiveProps(newProps) {
-		// Scroll to top when changing category
+		// Scroll to top when changing category and reset the selected category tab
 		if (newProps.currentCategory !== this.props.currentCategory) {
 			this.scrollableViewTopNode.scrollIntoView();
+			this.resetSubCategoryTab(newProps.currentCategory);
 		}
 	}
 
-	handleCategoryTabClick =(category) => () => {
+	/**
+	 * @param {Category} category
+	 */
+	resetSubCategoryTab(category) {
+		if (!category || category.platformCategories.length === 0) {
+			this.currentCategoryTab = null;
+		} else {
+			this.currentCategoryTab = category.platformCategories[0];
+		}
+	}
+
+	handleCategoryTabClick = (category) => () => {
 		this.currentCategoryTab = category;
 	};
 
@@ -85,10 +107,10 @@ class Index extends Component {
 	}
 
 	getCategoryTabs() {
-		return this.props.categories.map(category => ({
-			...pick(category, 'id', 'title', 'icon'),
-			callback: this.handleCategoryTabClick(category),
-			isActive: this.currentCategoryTab === category,
+		return this.props.currentCategory.platformCategories.map(platformCategory => ({
+			...platformTabs[platformCategory.platform],
+			callback: this.handleCategoryTabClick(platformCategory),
+			isActive: this.currentCategoryTab.platform === platformCategory.platform,
 		}));
 	}
 
@@ -117,36 +139,33 @@ class Index extends Component {
 	};
 
 	renderPlatformCategories() {
+		if (!this.currentCategoryTab) {
+			return null;
+		}
+
 		return this.currentCategoryTab.categories.map(category => (
 			<div className="shop__category-item" key={category.id} onClick={this.handleCategoryClick(category)}>
-				<p>{category.title}</p>
+				<p>{category.name}</p>
 				<Icon icon="chevron-right"/>
 			</div>
 		));
 	}
 
 	renderAppBarPre() {
-		if (!this.props.currentCategory) {
+		if (this.props.isFrontPage) {
 			return null;
 		}
 
 		return <Back label="Back" onClick={this.props.onBack} />;
 	}
 
-	renderAppBarPost() {
-		const actions = [
-			{
-				id: 'cart',
-				icon: 'shopping-cart',
-				callback: this.props.onCartClick,
-				className: this.props.isCartEmpty ? '' : 'appBarAction--withBadge',
-			},
-		];
-
-		return <Actions actions={actions} />;
-	}
-
 	renderSubCategories() {
+		const platformCategories = this.props.currentCategory.platformCategories;
+
+		if (!Array.isArray(platformCategories) || !platformCategories.length) {
+			return null;
+		}
+
 		return (
 			<Fragment>
 				<div className="streamList__title ml16">
@@ -161,69 +180,49 @@ class Index extends Component {
 		);
 	}
 
-	renderSubCategory() {
-		const category = this.props.currentCategory;
-		const games = category.games.map(game => (
-			<div key={game.id} className="shopGame__subCategoryGame">
-				<Teaser
-					game={game}
-					onClick={this.handleGameClick(game)}
-					onAddToCart={this.handleAddToCart(game)}
+	renderSections() {
+		return this.props.currentCategory.sections.map(/** @type {CategorySection} */ section => (
+			<div className="streamList__container" key={section.id}>
+				<TeaserList
+					games={section.games}
+					onGameClick={this.props.onGameClick}
+					onAddToCart={this.props.onAddGameToCart}
+					icon="video" // hardcoded for now
+					title={section.title}
+					display={section.display}
 				/>
 			</div>
 		));
-
-		return (
-			<div className="shopGame__subCategory">
-				<div className="streamList__title">
-					<Icon icon="gamepad" />
-					<h2 className="streamList__title-text">{category.title}</h2>
-				</div>
-				<div className="shopGame__subCategoryGames">
-					{games}
-				</div>
-			</div>
-		)
 	}
 
-	renderRootCategory() {
+	renderContent() {
+		/** @type {Category} */
+		const category = this.props.currentCategory;
+
+		if (!category) {
+			return null;
+		}
+
 		return (
 			<Fragment>
 				<TeaserList
-					games={this.props.featuredGames}
+					games={category.featuredGames}
 					onlyImage
 					onGameClick={this.props.onGameClick}
 					onAddToCart={this.props.onAddGameToCart}
 				/>
-				<div className="streamList__container">
-					<TeaserList
-						games={this.props.latestGames}
-						onGameClick={this.props.onGameClick}
-						onAddToCart={this.props.onAddGameToCart}
-						icon="video"
-						title="Latest Games"
-					/>
-				</div>
-				<div className="streamList__container">
-					<TeaserList
-						games={this.props.latestContent}
-						onGameClick={this.props.onGameClick}
-						onAddToCart={this.props.onAddGameToCart}
-						icon="video"
-						title="Latest Content"
-					/>
-				</div>
+				{this.renderSections()}
 				{this.renderSubCategories()}
 			</Fragment>
 		);
 	}
 
-	renderContent() {
-		if (this.props.currentCategory) {
-			return this.renderSubCategory();
+	renderLoading() {
+		if (!this.props.loading) {
+			return null;
 		}
 
-		return this.renderRootCategory();
+		return <Loading />;
 	}
 
 	render() {
@@ -232,20 +231,15 @@ class Index extends Component {
 				<AppBar
 					pre={this.renderAppBarPre()}
 					title={this.renderAppBarLogo()}
-					post={this.renderAppBarPost()}
+					post={<AppBarCart onClick={this.props.onCartClick} />}
 				/>
 				<div className="shop__search-wrapper">
-					<input type="search" placeholder="Search communities..." />
+					<input type="search" placeholder="Search store..." />
 				</div>
-				<div className="shop__balance">
-					<div className="shop__balance-current">
-						<Icon icon="tokenplay"/>
-						<p>{this.props.user.tokenBalance.toLocaleString('en-CA')} Tokens Available</p>
-					</div>
-					<button className="btn btn-sm btn-yellow" onClick={this.props.onTokensAdd}>Add</button>
-				</div>
+				<TokensBalance onCartItemAdded={this.props.onCartItemAdded} />
 				<ScrollableView>
 					<div ref={(n) => { this.scrollableViewTopNode = n; }} />
+					{this.renderLoading()}
 					{this.renderContent()}
 				</ScrollableView>
 			</div>

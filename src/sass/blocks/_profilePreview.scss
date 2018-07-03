@@ -5,6 +5,11 @@
     flex-direction: column;
     padding: 36px 0 16px;
   }
+  &__loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
   &__avatar {
     height: 66px;
     width: 66px;

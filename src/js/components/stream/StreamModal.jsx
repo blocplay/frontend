@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { has } from 'underscore';
+import has from 'lodash/has';
 import MockObject from '../../mock/MockObject';
 import StreamVideo from '../stream/StreamVideo';
 import StreamMeta from '../stream/StreamMeta';

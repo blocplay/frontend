@@ -4,11 +4,11 @@ import { inject } from 'mobx-react/index';
 import PropTypes from 'prop-types';
 import AppBarComponent from '../../../../components/AppBar';
 import Actions from '../../../../components/appBar/Actions';
-import { getConversationById } from '../../../../mock/sampleConversations';
 import Back from '../../../../components/appBar/Back';
 import UI from '../../../../app/UI';
+import ConversationRepository from '../../../../app/Repositories/ConversationRepository';
 
-@inject('ui')
+@inject('ui', 'conversationRepository')
 class AppBar extends Component {
 	static propTypes = {
 		onSearchClick: PropTypes.func,
@@ -34,10 +34,12 @@ class AppBar extends Component {
 	);
 
 	// Must be defined after handleBack since it uses it
-	back = <Back label="Cancel" onClick={this.handleBack} />;
+	back = <Back onClick={this.handleBack} />;
 
 	renderForConversation = ({ match }) => {
-		const conversation = getConversationById(match.params.id);
+		/** @type {ConversationRepository} */
+		const repo = this.props.conversationRepository;
+		const conversation = repo.retrieve(match.params.id);
 
 		if (!conversation) {
 			return null;
@@ -71,6 +73,7 @@ class AppBar extends Component {
 // Injected props
 AppBar.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	conversationRepository: PropTypes.instanceOf(ConversationRepository).isRequired,
 };
 
 export default AppBar;

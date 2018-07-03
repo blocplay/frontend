@@ -67,3 +67,9 @@ electron/build
 /web/dist/assets
 
 /tmp
+/etc/env.dev.js
+/src/js/mock/mockData.js
+web/dist/*.node
+dist/
+release-builds/
+tmp-build/

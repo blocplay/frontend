@@ -8,7 +8,6 @@ import PanelModal from '../../../../components/modals/PanelModal';
 import UI from '../../../../app/UI';
 import sampleCommunities, { findCommunityById } from '../../../../mock/sampleCommunities';
 import CommunityModal from '../../../../components/communities/CommunityModal';
-import { pushMessage } from '../../../../mock/sampleConversations';
 
 @inject('ui')
 @observer
@@ -77,8 +76,9 @@ class Communities extends ReactComponent {
 		this.props.ui.router.goTo(`/dashboard/home/communities/${community.id}`);
 	};
 
+	// eslint-disable-next-line no-unused-vars
 	handleMessage = (message) => {
-		pushMessage(message, this.displayedCommunity.conversation);
+		// TODO
 	};
 
 	handleSubscribe = () => {

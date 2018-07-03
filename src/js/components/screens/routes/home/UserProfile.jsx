@@ -2,25 +2,31 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import MockObject from '../../../../mock/MockObject';
 import AppBar from '../../../AppBar';
 import Back from '../../../appBar/Back';
 import Sidebar from '../../../Sidebar';
-import ProfilePreview from '../../../user/ProfilePreview';
+import ProfilePreview from '../../../../containers/user/ProfilePreview';
 import Icon from '../../../icons/Icon';
 import Avatar from '../../../appBar/Avatar';
 import LargeAvatar from '../../../user/Avatar';
 import ScrollableView from '../../../ScrollableView';
+import User from '../../../../app/User';
+import Loading from '../../../Loading';
 
 @observer
 class UserProfile extends Component {
 	static propTypes = {
-		user: PropTypes.instanceOf(MockObject).isRequired,
+		user: PropTypes.instanceOf(User),
+		mockFriends: PropTypes.arrayOf(PropTypes.instanceOf(User)),
+		loading: PropTypes.bool,
 		onBack: PropTypes.func,
 		onSendMessageClick: PropTypes.func,
 		onWatchStreamClick: PropTypes.func,
 	};
 	static defaultProps = {
+		user: null,
+		mockFriends: [],
+		loading: false,
 		onBack: null,
 		onSendMessageClick: null,
 		onWatchStreamClick: null,
@@ -30,7 +36,7 @@ class UserProfile extends Component {
 	/**
 	 * @type {'message'|'activity'|'friends'}
 	 */
-	view = '';
+	view = 'activity';
 
 	componentWillMount() {
 		this.view = 'activity';
@@ -89,24 +95,24 @@ class UserProfile extends Component {
 						<div className="activities__card">
 							<div className="activities__meta">
 								<div className="activities__text">
-									<div className="activities__card-title">{user.username} is friends with {user.friends[0].username}</div>
+									<div className="activities__card-title">{user.displayName} is friends with Scott Anthony</div>
 									<div className="stream__gameTag-publisher">2 days ago</div>
 								</div>
 								<div className="activities__friends">
 									<Avatar user={user} />
-									<Avatar user={user.friends[0]} />
+									<Avatar user={this.props.mockFriends[0]} />
 								</div>
 							</div>
 						</div>
 						<div className="activities__card">
 							<div className="activities__meta">
 								<div className="activities__text">
-									<div className="activities__card-title">{user.username} played with {user.friends[0].username}</div>
+									<div className="activities__card-title">{user.displayName} played with Scott Anthony</div>
 									<div className="stream__gameTag-publisher">1 week ago</div>
 								</div>
 								<div className="activities__friends">
 									<Avatar user={user} />
-									<Avatar user={user.friends[0]} />
+									<Avatar user={this.props.mockFriends[0]} />
 								</div>
 							</div>
 						</div>
@@ -117,7 +123,7 @@ class UserProfile extends Component {
 	}
 
 	renderFriends() {
-		const friends = this.props.user.friends.map(user => (
+		const friends = this.props.mockFriends.map(user => (
 			<div className="streamModal__viewer" key={user.id}>
 				<LargeAvatar user={user}/>
 			</div>
@@ -137,6 +143,10 @@ class UserProfile extends Component {
 	}
 
 	renderContent() {
+		if (!this.props.user) {
+			return null;
+		}
+
 		switch (this.view) {
 			case 'friends':
 				return this.renderFriends();
@@ -145,20 +155,39 @@ class UserProfile extends Component {
 		}
 	}
 
+	renderLoading() {
+		if (!this.props.loading) {
+			return null;
+		}
+
+		return <Loading/>;
+	}
+
+	renderProfilePreview() {
+		if (!this.props.user) {
+			return null;
+		}
+
+		return (
+			<ProfilePreview
+				user={this.props.user}
+				sectionTabs={this.getSectionTabs()}
+				external
+				onWatchStreamClick={this.props.onWatchStreamClick}
+			/>
+		);
+	}
+
 	render() {
 		return (
 			<div className="flex-container">
 				<AppBar pre={<Back onClick={this.props.onBack} />} />
 				<div className="userProfile">
 					<Sidebar className="userProfile__sidebar">
-						<ProfilePreview
-							user={this.props.user}
-							sectionTabs={this.getSectionTabs()}
-							external
-							onWatchStreamClick={this.props.onWatchStreamClick}
-						/>
+						{this.renderProfilePreview()}
 					</Sidebar>
 					<div className="flex-container">
+						{this.renderLoading()}
 						{this.renderContent()}
 					</div>
 				</div>

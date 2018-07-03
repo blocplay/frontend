@@ -1,4 +1,4 @@
-import { extend } from 'underscore';
+import merge from 'lodash/merge';
 
 /**
  * This class is used only for the prototype. In the final app, the different data will be
@@ -17,7 +17,7 @@ import { extend } from 'underscore';
  */
 class MockObject {
 	constructor(init = {}) {
-		extend(this, init);
+		merge(this, init);
 	}
 }
 

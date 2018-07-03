@@ -18,7 +18,7 @@ input, textarea, select, button {
 body {
 	background-color: $dark-cyan;
 	color: $white;
-	font-size: 16px;
+	font-size: $default-font-size;
 	font-family: $base-font
 }
 

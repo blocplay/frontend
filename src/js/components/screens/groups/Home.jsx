@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '../../AppBar';
 import SectionTabs from '../../navigation/SectionTabs';
-import MockObject from '../../../mock/MockObject';
 import Sidebar from '../../Sidebar';
-import ProfilePreview from '../../user/ProfilePreview';
+import ProfilePreview from '../../../containers/user/ProfilePreview';
 import Avatar from '../../appBar/Avatar';
 import Actions from '../../appBar/Actions';
+import User from '../../../app/User';
 
 const propTypes = {
 	children: PropTypes.element.isRequired,
 	sectionTabs: PropTypes.array,
-	currentUser: PropTypes.instanceOf(MockObject),
+	currentUser: PropTypes.instanceOf(User),
 	onSettingsClick: PropTypes.func,
 };
 

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Component from '../../../../components/screens/routes/home/Games';
-import currentUser from '../../../../mock/currentUser';
 import UI from '../../../../app/UI';
 import PanelModal from '../../../../components/modals/PanelModal';
-import GamePreviewModal from '../../../../components/game/GamePreviewModal';
+import UserGamePreviewModal from '../../../game/UserGamePreviewModal';
+import Authentication from '../../../../app/Authentication';
+import Config from '../../../../app/Config';
 
-@inject('ui')
+@inject('ui', 'auth', 'config')
 @observer
 class Games extends ReactComponent {
 	static propTypes = {};
@@ -28,17 +29,43 @@ class Games extends ReactComponent {
 	 * @type {MockObject}
 	 */
 	@observable
-	displayedGame = null;
+	displayedUserGame = null;
 
 	@observable
 	gameModalVisible = false;
 
+	/**
+	 * True when loading the user games
+	 * @type {boolean}
+	 */
+	@observable
+	loadingUserGames = false;
+
+	/**
+	 * User reference, see README.md
+	 * @type {User}
+	 */
+	user;
+
 	componentWillMount() {
+		this.loadingUserGames = false;
 		this.didMount = false;
+		this.user = this.props.auth.getUser();
+		this.loadUserGames();
 	}
 
 	componentDidMount() {
 		this.didMount = true;
+	}
+
+	loadUserGames() {
+		this.loadingUserGames = true;
+		const gameAttributes = this.props.config.get('gameAttributes.userGames');
+		// For now, we force a reload (until we have the async update)
+		this.user.loadUserGames(gameAttributes, true)
+			.then(() => {
+				this.loadingUserGames = false;
+			});
 	}
 
 	openModal() {
@@ -49,8 +76,8 @@ class Games extends ReactComponent {
 		this.gameModalVisible = false;
 	}
 
-	handleGameClick = (game) => {
-		this.displayedGame = game;
+	handleUserGameClick = (game) => {
+		this.displayedUserGame = game;
 		this.openModal();
 	};
 
@@ -58,11 +85,30 @@ class Games extends ReactComponent {
 		this.closeModal();
 	};
 
-	handleGameStoreLinkClick = () => {
-		this.props.ui.router.goTo(`/dashboard/shop/index/${this.displayedGame.id}`);
+	/**
+	 * JDC: Test integration.
+	 * For now we launch here, it will always run BRWC to check if additional processing is needed.
+	 * it also runs a speedd audit in case of game corruption..
+	 * 
+	 * current behavior is it toggles between download and stop
+	 */
+	handleDownloadClick = (userGame) => {
+		if(!this.props.ui.application.downloadManager.downloadInProgress) {
+			this.props.ui.application.downloadManager.startDownload(userGame.game);
+		}
+		else {
+			this.props.ui.application.downloadManager.stopDownload();
+		}
+		
 	};
 
-	renderGameModal() {
+	handleModalDownloadClick = () => {
+		// This is the same download button. Need to disable or change the button once download is running..
+		this.handleDownloadClick(this.displayedUserGame);
+		this.closeModal();
+	};
+
+	renderUserGameModal() {
 		// react-modal and react-hot-loader workaround
 		if (!this.didMount) {
 			return null;
@@ -71,7 +117,7 @@ class Games extends ReactComponent {
 
 		const modalLocation = this.props.ui.getModalLocation('dashboard-0');
 
-		if (!this.displayedGame || !modalLocation) {
+		if (!this.displayedUserGame || !modalLocation) {
 			return null;
 		}
 
@@ -81,27 +127,41 @@ class Games extends ReactComponent {
 				parentSelector={() => modalLocation}
 				onRequestClose={this.handleCloseModal}
 			>
-				<GamePreviewModal
-					game={this.displayedGame}
+				<UserGamePreviewModal
+					userGame={this.displayedUserGame}
 					onBack={this.handleCloseModal}
-					onStoreLinkClick={this.handleGameStoreLinkClick}
+					onDownloadClick={this.handleModalDownloadClick}
 				/>
 			</PanelModal>
 		);
 	}
 
-	getGames() {
-		return currentUser.games.map(userGame => userGame.game);
+	getAllUserGames() {
+		return this.user.userGames;
+	}
+
+	getDownloadedUserGames() {
+		return this.getAllUserGames().filter(
+			userGame => userGame.game.package.downloaded
+		);
+	}
+
+	getDownloadManager() {
+		return this.props.ui.application.downloadManager;
 	}
 
 	render() {
 		return (
 			<Fragment>
 				<Component
-					games={this.getGames()}
-					onGameClick={this.handleGameClick}
+					loadingUserGames={this.loadingUserGames}
+					allUserGames={this.getAllUserGames()}
+					downloadedUserGames={this.getDownloadedUserGames()}
+					onUserGameClick={this.handleUserGameClick}
+					onDownloadClick={this.handleDownloadClick}
+					dlManager={this.getDownloadManager()}
 				/>
-				{this.renderGameModal()}
+				{this.renderUserGameModal()}
 			</Fragment>
 		);
 	}
@@ -110,6 +170,8 @@ class Games extends ReactComponent {
 // Injected props
 Games.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
+	config: PropTypes.instanceOf(Config).isRequired,
 };
 
 export default Games;

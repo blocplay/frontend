@@ -1,10 +1,16 @@
 .gamePreviewModal {
   display: flex;
   padding: 22px 15px 0 10px;
+  &__loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    width: 100%;
+  }
   &__poster {
     @include aspect-ratio(208, 274, '.gamePreviewModal__image');
     margin-right: 10px;
-    flex: 0 1 208px;
+    flex: 0 1 230px;
   }
   &__image {
     width: 100%;
@@ -22,7 +28,22 @@
     margin-bottom: 8px;
   }
   &__view {
-    margin-top: 28px;
+    margin-top: 20px;
+
+    button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+    }   
+    button:first-child {
+      margin-bottom: 8px;
+    }
+    svg {
+      width: 22px;
+      margin-right: 5px;
+      fill: $dark-yellow;
+    }
   }
   &__details {
     font-size: 14px;

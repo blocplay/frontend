@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MockObject from '../../mock/MockObject';
 import Avatar from '../user/Avatar';
+import ConversationMessage from '../../app/ConversationMessage';
 
 const propTypes = {
-	entry: PropTypes.instanceOf(MockObject).isRequired,
+	message: PropTypes.instanceOf(ConversationMessage).isRequired,
 	isCurrentUser: PropTypes.bool,
 };
 
@@ -18,14 +18,14 @@ function Message(props) {
 	return (
 		<div className={className}>
 			<div className="conversationMessage__avatar">
-				<Avatar user={props.entry.user} />
+				<Avatar user={props.message.user} />
 			</div>
 			<div className="conversationMessage__content">
-				<div className="conversationMessage__text">
-					{ props.entry.data.content }
-				</div>
+				<pre className="conversationMessage__text">
+					{ props.message.content }
+				</pre>
 				<div className="conversationMessage__datetime">
-					{ props.entry.datetime.format('LL - LT') }
+					{ props.message.creationDate.format('LL - LT') }
 				</div>
 			</div>
 

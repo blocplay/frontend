@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
-import { sample } from 'underscore';
+import sampleSize from 'lodash/sampleSize';
+import sample from 'lodash/sample';
 import MockObject from './MockObject';
 import randomConversationHistory from './randomConversationHistory';
 import sampleUsers from './sampleUsers';
@@ -62,8 +63,8 @@ const communities = [
 	nbMembers: 2135,
 	language: 'English',
 	description: 'Red vs Blue',
-	conversation: randomConversationHistory(sample(sampleUsers), sample(sampleUsers, 3), counter),
-	playing: sample(sampleUsers, 5),
+	conversation: randomConversationHistory(sample(sampleUsers), sampleSize(sampleUsers, 3), counter),
+	playing: sampleSize(sampleUsers, 5),
 	members: [...sampleUsers],
 	...community,
 }));

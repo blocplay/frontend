@@ -23,7 +23,7 @@ function StreamList(props) {
 	const swiperParams = {
 		slidesPerView: 'auto',
 		spaceBetween: 22,
-		wrapperClass: 'streamList__list',
+		wrapperClass: 'streamList__row',
 	};
 	const handleClick = stream => () => {
 		if (props.onStreamClick) {

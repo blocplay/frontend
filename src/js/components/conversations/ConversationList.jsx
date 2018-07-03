@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, PropTypes as PropTypesMobx } from 'mobx-react';
-import MockObject from '../../mock/MockObject';
 import Conversation from '../../containers/conversations/ConversationPreview';
+import ConversationModel from '../../app/Conversation';
+import Loading from '../Loading';
 
 @observer
 class ConversationList extends Component {
 	static propTypes = {
-		conversations: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(MockObject)),
-		currentConversation: PropTypes.instanceOf(MockObject),
+		conversations: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(ConversationModel)),
+		currentConversation: PropTypes.instanceOf(ConversationModel),
+		loading: PropTypes.bool,
 		onConversationClick: PropTypes.func,
 	};
 	static defaultProps = {
 		conversations: [],
 		currentConversation: null,
+		loading: false,
 		onConversationClick: null,
 	};
 
@@ -37,10 +40,34 @@ class ConversationList extends Component {
 		));
 	}
 
+	renderLoading() {
+		return (
+			<div className="conversationList__loading">
+				<Loading />
+			</div>
+		);
+	}
+
+	renderEmpty() {
+		return (
+			<div className="conversationList__empty">You didn't start any conversation yet.</div>
+		);
+	}
+
 	render() {
+		let content;
+
+		if (this.props.loading) {
+			content = this.renderLoading();
+		} else if (!this.props.conversations.length) {
+			content = this.renderEmpty();
+		} else {
+			content = this.renderConversations();
+		}
+
 		return (
 			<div className="conversationList">
-				{ this.renderConversations() }
+				{ content }
 			</div>
 		);
 	}

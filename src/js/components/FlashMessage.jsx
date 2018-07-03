@@ -13,7 +13,7 @@ const defaultProps = {
 
 function FlashMessage(props) {
 	return (
-		<div className="flashMessage" onClick={props.onClick}>
+		<div className="flashMessage btn btn-outline btn-sm" onClick={props.onClick}>
 			{props.message}
 			<Icon key="chevron" icon="chevron-right"/>
 		</div>

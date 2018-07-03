@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin({
 	filename: 'app.css',
@@ -12,10 +14,15 @@ const {
 	sassLoaderConfiguration,
 } = require('./loaderConfiguration')(extractSass);
 
+const stubDLMngrPath = path.resolve(__dirname, '../src/brwc/DownloadManager.stub.js');
 module.exports = {
 	// ...the rest of your config
 
-	entry: [path.resolve(__dirname, '../index.web.js'), path.resolve(__dirname, '../src/sass/app.scss')],
+	entry: [
+		'whatwg-fetch', // window.fetch polyfill
+		path.resolve(__dirname, '../index.web.js'),
+		path.resolve(__dirname, '../src/sass/app.scss'),
+	],
 	module: {
 		rules: [
 			babelLoaderConfiguration,
@@ -40,11 +47,16 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false,
-			},
-		}),
+		// We replace DownloadManager.js imports to DownloadManager.stub.js
+		new webpack.NormalModuleReplacementPlugin(
+			/brwc\/DownloadManager(\.js)?$/,
+			(resource) => {
+				if (fs.existsSync(stubDLMngrPath)) {
+					resource.request = stubDLMngrPath;
+				}
+			}
+		),
+		new UglifyJsPlugin(),
 	],
 
 	resolve: {

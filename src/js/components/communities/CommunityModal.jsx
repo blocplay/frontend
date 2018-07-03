@@ -42,7 +42,7 @@ class CommunityModal extends Component {
 	view = null;
 
 	componentWillMount() {
-		this.view = 'wall';
+		this.view = 'playing';
 		this.subscriptionOptionsVisible = false;
 	}
 
@@ -114,7 +114,7 @@ class CommunityModal extends Component {
 		return (
 			<Fragment>
 				<ScrollableView>
-					<ConversationHistory history={this.props.community.conversation} currentUser={this.props.currentUser} />
+					<ConversationHistory events={[]} currentUser={this.props.currentUser} />
 				</ScrollableView>
 				<MessageInput onMessage={this.props.onMessage}/>
 			</Fragment>

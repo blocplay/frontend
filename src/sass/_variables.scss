@@ -1,7 +1,8 @@
 // Colors
 $white: #fff; // Primary
 $med-grey: #62676B; // Active text on top of $dark-grey, message placeholder
-$med-grey-inactive: #3B4248;//App tabs inactive text on top o
+$med-grey-inactive: lighten(#3B4248, 8%); //App tabs inactive text on top o
+$active-text-active: lighten($med-grey, 40%); //App tabs active text on top o
 $compose-input: #20272E; // Bg for compose
 $dark-grey: #141B23; // Bottom app tabs
 $off-black: #12161A; // Input bg
@@ -17,6 +18,7 @@ $bright: #1ACBC8; // Progress bars, logo
 $yellow: #CBC21A; // Accent bg, buttons, contract
 $yellow-tab-text: #797316; // Text on active section tab
 $dark-yellow: #504C02; // Text on yellow bg
+$light-red-error: #df7468;
 
 $bronze: #F5A623;
 $silver: #D4D4D4;
@@ -27,7 +29,10 @@ $online: #7ED321;
 
 // Fonts
 $base-font: 'Roboto', sans-serif;
+$heading-font: 'Avenir', sans-serif;
+$default-font-size: 16px;
 
 // metrics
 $sidebar-width: 376px;
-$app-side-padding: 16px;
+$app-side-padding: 20px;
+$letter-spacing: 0.03125em;  /* 16 * 0.03125 = 0.5px */

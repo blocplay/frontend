@@ -3,22 +3,17 @@ import PropTypes from 'prop-types';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Component from '../../../../components/screens/routes/shop/Index';
-import currentUser from '../../../../mock/currentUser';
-import {
-	cart,
-	categories,
-	createGameItem,
-	createTokenItem,
-	indexGames,
-} from '../../../../mock/shop';
 import FullModal from '../../../../components/modals/FullModal';
 import UI from '../../../../app/UI';
-import GameModal from '../../../../components/shop/GameModal';
-import { getGameById } from '../../../../mock/sampleGames';
+import GameModal from '../../../shop/GameModal';
 import PanelModal from '../../../../components/modals/PanelModal';
 import Cart from '../../../cart/Cart';
+import GameItem from '../../../../app/CartItem/GameItem';
+import Authentication from '../../../../app/Authentication';
+import Store from '../../../../app/EStore/Store';
+import Config from '../../../../app/Config';
 
-@inject('ui')
+@inject('ui', 'auth', 'eStore', 'config')
 @observer
 class Index extends ReactComponent {
 	static propTypes = {
@@ -41,7 +36,7 @@ class Index extends ReactComponent {
 	 * @type {MockObject}
 	 */
 	@observable
-	displayedGame = null;
+	displayedGameId = null;
 
 	@observable
 	gameModalVisible = false;
@@ -49,12 +44,20 @@ class Index extends ReactComponent {
 	@observable
 	cartOpened = false;
 
+	/**
+	 * @type {Category|null}
+	 */
 	@observable
 	currentCategory = null;
 
+	@observable
+	loadingCategory = false;
+
 	componentWillMount() {
 		this.didMount = false;
+		this.loadingCategory = false;
 		this.extractDisplayedGameFromPath();
+		this.loadFrontPage();
 	}
 
 	componentDidMount() {
@@ -67,17 +70,26 @@ class Index extends ReactComponent {
 
 	extractDisplayedGameFromPath(props = this.props) {
 		const { gameId } = props.match.params;
-		const foundGame = getGameById(gameId);
 
-		if (foundGame) {
-			this.displayGame(foundGame);
+		if (typeof gameId === 'string') {
+			this.displayGame(gameId);
 		} else {
 			this.hideDisplayedGame();
 		}
 	}
 
-	displayGame(game) {
-		this.displayedGame = game;
+	loadFrontPage() {
+		this.loadingCategory = true;
+		const gameAttributes = this.props.config.get('gameAttributes.store.category');
+		this.props.eStore.loadFrontPage(gameAttributes, false)
+			.then(category => {
+				this.currentCategory = category;
+				this.loadingCategory = false;
+			});
+	}
+
+	displayGame(gameId) {
+		this.displayedGameId = gameId;
 		this.gameModalVisible = true;
 	}
 
@@ -89,43 +101,32 @@ class Index extends ReactComponent {
 		this.cartOpened = false;
 	}
 
-	isCartEmpty() {
-		return cart.items.length === 0;
-	}
-
 	handleCategoryClick = (category) => {
-		this.currentCategory = category;
+		// Disabled for now
+		// this.currentCategory = category;
 	};
 
 	hideDisplayedGame() {
 		this.gameModalVisible = false;
 	}
 
-	handleTokensAdded = (amount) => {
-		cart.items.push(createTokenItem(amount));
-		this.openCart();
-	};
-
-	handleTokensAdd = () => {
-		this.props.ui.showSendTokensModal(currentUser, this.handleTokensAdded);
-	};
-
 	handleGameClick = (game) => {
 		this.props.ui.router.goTo(`/dashboard/shop/index/${game.id}`);
 	};
 
 	handleAddGameToCart = (game) => {
-		cart.items.push(createGameItem(game));
+		const item = new GameItem();
+		item.game = game;
+		this.props.auth.getUser().getCart().addItem(item);
+		this.handleCartItemAdded();
+	};
+
+	handleCartItemAdded = () => {
 		this.openCart();
 	};
 
 	handleGameModalBack = () => {
 		this.props.ui.router.goBack();
-	};
-
-	handleFavouriteDisplayedGame = () => {
-		const value = this.displayedGame.isCurrentUserFavourite;
-		value.set(!value.get());
 	};
 
 	handleCartClick = () => {
@@ -149,7 +150,7 @@ class Index extends ReactComponent {
 
 		const modalLocation = this.props.ui.getModalLocation('dashboard-0');
 
-		if (!this.displayedGame || !modalLocation) {
+		if (!this.displayedGameId || !modalLocation) {
 			return null;
 		}
 
@@ -159,10 +160,9 @@ class Index extends ReactComponent {
 				parentSelector={() => modalLocation}
 			>
 				<GameModal
-					game={this.displayedGame}
+					gameId={this.displayedGameId}
 					onBack={this.handleGameModalBack}
-					onFavourite={this.handleFavouriteDisplayedGame}
-					onAddToCart={() => { this.handleAddGameToCart(this.displayedGame) }}
+					onAddToCart={this.handleAddGameToCart}
 				/>
 			</FullModal>
 		);
@@ -187,10 +187,7 @@ class Index extends ReactComponent {
 				parentSelector={() => modalLocation}
 				onRequestClose={this.handleCartClose}
 			>
-				<Cart
-					onClose={this.handleCartClose}
-					onTokensAdd={this.handleTokensAdd}
-				/>
+				<Cart onClose={this.handleCartClose} />
 			</PanelModal>
 		);
 	}
@@ -199,18 +196,14 @@ class Index extends ReactComponent {
 		return (
 			<Fragment>
 				<Component
-					user={currentUser}
+					loading={this.loadingCategory}
+					isFrontPage // hardcoded for now
 					currentCategory={this.currentCategory}
-					onTokensAdd={this.handleTokensAdd}
 					onCategoryClick={this.handleCategoryClick}
-					featuredGames={indexGames.featured}
-					latestGames={indexGames.latestGames}
-					latestContent={indexGames.latestContent}
-					isCartEmpty={this.isCartEmpty()}
 					onGameClick={this.handleGameClick}
+					onCartItemAdded={this.handleCartItemAdded}
 					onAddGameToCart={this.handleAddGameToCart}
 					onCartClick={this.handleCartClick}
-					categories={categories}
 					onBack={this.handleBack}
 				/>
 				{ this.renderGameModal() }
@@ -223,6 +216,9 @@ class Index extends ReactComponent {
 // Injected props
 Index.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
+	eStore: PropTypes.instanceOf(Store).isRequired,
+	config: PropTypes.instanceOf(Config).isRequired,
 };
 
 export default Index;

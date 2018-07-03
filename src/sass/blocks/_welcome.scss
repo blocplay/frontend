@@ -37,7 +37,9 @@
       .icon {
         width: 20px;
         height: 20px;
-        margin: -1px 10px 0 -30px;
+        margin: -8px 10px 0 -30px;
+        position: relative;
+        top: 3px;
         animation: welcome-loading-spin 0.9s infinite linear;
         display: none;
       }
@@ -79,7 +81,16 @@
         display: block;
       }
     }
-
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container {
+      width: 100%;
+    }
+  }
+  &__error {
+    color: $light-red-error;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
   }
   &__eula {
     color: $cyan-placeholder;

@@ -1,15 +1,15 @@
 import React, { Component as ReactComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import ConversationInstance from '../../mock/MockObject';
+import ConversationModel from '../../app/Conversation';
 import Component from '../../components/conversations/ConversationPreview';
-import sampleConversations from '../../mock/sampleConversations';
 import UI from '../../app/UI';
+import ConversationRepository from '../../app/Repositories/ConversationRepository';
 
-@inject('ui')
+@inject('ui', 'conversationRepository')
 class ConversationPreview extends ReactComponent {
 	static propTypes = {
-		conversation: PropTypes.instanceOf(ConversationInstance).isRequired,
+		conversation: PropTypes.instanceOf(ConversationModel).isRequired,
 		active: PropTypes.bool,
 		onClick: PropTypes.func,
 	};
@@ -25,7 +25,9 @@ class ConversationPreview extends ReactComponent {
 	};
 
 	handleDelete = () => {
-		sampleConversations.remove(this.props.conversation);
+		/** @type {ConversationRepository} */
+		const repo = this.props.conversationRepository;
+		repo.delete(this.props.conversation);
 	};
 
 	handleToken = () => {
@@ -50,6 +52,7 @@ class ConversationPreview extends ReactComponent {
 // Injected props
 ConversationPreview.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	conversationRepository: PropTypes.instanceOf(ConversationRepository).isRequired,
 };
 
 export default ConversationPreview;

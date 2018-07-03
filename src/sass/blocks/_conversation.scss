@@ -10,14 +10,33 @@
 	&-box {
 		width: 100%;
     background-color: $off-black;
-    padding: 16px 10px;
+    padding: 10px;
 		border-radius: 3px;
 		color: $med-grey;
 	}
 }
 
+.conversation__noFriends {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	transform: translateY(-50%);
+	text-align: center;
+
+	p:not(:last-child) {
+		margin-bottom: 15px;
+	}
+}
+
 .conversation__history {
 	flex: 1;
+}
+
+.conversation__loading {
+	display: flex;
+	margin-top: 40px;
+	justify-content: center;
 }
 
 .conversation__prompt {
@@ -27,4 +46,13 @@
 	justify-content: center;
 	opacity: 0.5;
 	flex: 1;
+}
+
+.conversation__start-button {
+	display: flex;
+	button {
+		margin: 10px auto;
+		padding-left: 20px; 
+		padding-right: 20px;
+	}
 }

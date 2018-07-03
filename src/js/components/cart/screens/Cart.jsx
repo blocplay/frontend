@@ -1,34 +1,42 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import { observer, PropTypes as PropTypesMobx } from 'mobx-react';
-import numeral from 'numeral';
 import AppBar from '../../AppBar';
 import Back from '../../appBar/Back';
 import ScrollableView from '../../ScrollableView';
 import Summary from '../Summary';
-import MockObject from '../../../mock/MockObject';
 import Icon from '../../icons/Icon';
+import TokensBalance from '../../../containers/shop/TokensBalance';
+import AbstractCartItem from '../../../app/CartItem/AbstractCartItem';
+import Loading from '../../Loading';
 
 @observer
 class Cart extends Component {
 	static propTypes = {
-		balance: PropTypes.number,
-		items: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(MockObject)),
-		total: PropTypes.number,
+		items: PropTypesMobx.arrayOrObservableArrayOf(PropTypes.instanceOf(AbstractCartItem)),
+		loadingItems: PropTypes.bool,
+		purchasing: PropTypes.bool,
+		mustProvidePaymentCard: PropTypes.bool,
+		hasEnoughTokens: PropTypes.bool,
+		total: PropTypes.instanceOf(BigNumber),
 		onBack: PropTypes.func,
-		onTokensAdd: PropTypes.func,
 		onItemRemove: PropTypes.func,
 		onCheckoutClick: PropTypes.func,
+		onPurchaseClick: PropTypes.func,
 	};
 
 	static defaultProps = {
-		balance: 0,
 		items: [],
+		loadingItems: false,
+		purchasing: false,
+		mustProvidePaymentCard: false,
+		hasEnoughTokens: false,
 		total: 0,
 		onBack: null,
-		onTokensAdd: null,
 		onItemRemove: null,
 		onCheckoutClick: null,
+		onPurchaseClick: null,
 	};
 
 	isEmpty() {
@@ -36,6 +44,17 @@ class Cart extends Component {
 	}
 
 	renderSummary() {
+		let tokenDisclaimer = null;
+
+		if (!this.props.mustProvidePaymentCard) {
+			tokenDisclaimer = (
+				<div className="cart__disclaimer">
+					Clicking <strong>Purchase</strong> below will automatically purchase the
+					items in your cart using your available tokens.
+				</div>
+			);
+		}
+
 		return (
 			<Fragment>
 				<Summary
@@ -44,10 +63,7 @@ class Cart extends Component {
 					total={this.props.total}
 					showRemove
 				/>
-				<div className="cart__disclaimer">
-					Clicking <strong>Checkout</strong> below will automatically purchase the
-					items in your cart using your available tokens.
-				</div>
+				{tokenDisclaimer}
 			</Fragment>
 		)
 	}
@@ -58,7 +74,19 @@ class Cart extends Component {
 		)
 	}
 
+	renderLoading() {
+		return (
+			<div className="cart__loading">
+				<Loading />
+			</div>
+		);
+	}
+
 	renderContent() {
+		if (this.props.loadingItems || this.props.purchasing) {
+			return this.renderLoading();
+		}
+
 		if (this.isEmpty()) {
 			return this.renderEmpty();
 		}
@@ -66,14 +94,22 @@ class Cart extends Component {
 		return this.renderSummary();
 	}
 
-	renderCheckoutButton() {
-		if (this.isEmpty()) {
+	renderBuyButton() {
+		if (this.props.loadingItems || this.props.purchasing || this.isEmpty()) {
 			return null;
 		}
 
+		const disabled = !this.props.mustProvidePaymentCard && !this.props.hasEnoughTokens;
+		const label = this.props.mustProvidePaymentCard ? 'Checkout' : 'Purchase';
+		let clickCallback = null;
+
+		if (!disabled) {
+			clickCallback = this.props.mustProvidePaymentCard ? this.props.onCheckoutClick : this.props.onPurchaseClick;
+		}
+
 		return (
-			<div className="btn-yellow shopGame__purchase" onClick={this.props.onCheckoutClick}>
-				<button className="btn-yellow shopGame__purchase-button">Checkout</button>
+			<div className={`btn-yellow shopGame__purchase ${disabled ? 'shopGame__purchase--disabled': ''}`} onClick={clickCallback}>
+				<button className="btn-yellow shopGame__purchase-button">{label}</button>
 			</div>
 		);
 	}
@@ -82,17 +118,7 @@ class Cart extends Component {
 		return (
 			<div className="flex-container">
 				<AppBar title="Cart" pre={<Back onClick={this.props.onBack}/>}/>
-				<div className="shop__balance cart__balance">
-					<div className="shop__balance-current">
-						<Icon icon="tokenplay"/>
-						<p>{numeral(this.props.balance).format('0,0')} Tokens Available</p>
-					</div>
-					<div>
-						<button className="btn btn-sm btn-yellow" onClick={this.props.onTokensAdd}>
-							Add
-						</button>
-					</div>
-				</div>
+				<TokensBalance />
 				<ScrollableView>
 					<div className="cart">
 						<div className="streamList__title cart__title">
@@ -102,7 +128,7 @@ class Cart extends Component {
 						{this.renderContent()}
 					</div>
 				</ScrollableView>
-				{this.renderCheckoutButton()}
+				{this.renderBuyButton()}
 			</div>
 		);
 	}

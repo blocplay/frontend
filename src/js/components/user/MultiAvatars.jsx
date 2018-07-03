@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MockObject from '../../mock/MockObject';
 import Avatar from './Avatar';
+import User from '../../app/User';
 
 class MultiAvatars extends Component {
 	static propTypes = {
-		users: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
+		users: PropTypes.arrayOf(PropTypes.instanceOf(User)),
 	};
 	static defaultProps = {
 		users: [],

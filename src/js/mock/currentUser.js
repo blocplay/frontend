@@ -49,7 +49,9 @@ const data = {
 	friends: [
 		...sampleUsers,
 	],
-	avatar: 'mockImages/user/profile-avatar-5.jpg',
+	avatar: {
+		url: 'mockImages/user/profile-avatar-5.jpg',
+	},
 	invitations: observable(invitations),
 	subscriptions: observable(subscriptions),
 	trophies,

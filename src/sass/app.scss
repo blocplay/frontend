@@ -24,15 +24,17 @@
 @import "blocks/communityPreview";
 @import "blocks/conversation";
 @import "blocks/conversationCompose";
+@import "blocks/conversationEvent";
 @import "blocks/conversationHistory";
 @import "blocks/conversationList";
 @import "blocks/conversationMessage";
 @import "blocks/conversationPreview";
+@import "blocks/datePicker";
 @import "blocks/flashMessage";
 @import "blocks/friendsList";
 @import "blocks/fullModal";
-@import "blocks/gameList";
 @import "blocks/gamePreviewModal";
+@import "blocks/loading";
 @import "blocks/multiAvatars";
 @import "blocks/profilePreview";
 @import "blocks/progressBar";
@@ -44,6 +46,7 @@
 @import "blocks/screenGroupLive";
 @import "blocks/screenGroupMessages";
 @import "blocks/screenGroupWelcome";
+@import "blocks/screenLoading";
 @import "blocks/screens";
 @import "blocks/scrollableView";
 @import "blocks/sectionTab";
@@ -61,7 +64,11 @@
 @import "blocks/tabs";
 @import "blocks/trophies";
 @import "blocks/trophiesModal";
+@import "blocks/userGame";
+@import "blocks/userGames";
+@import "blocks/userList";
 @import "blocks/userProfile";
+@import "blocks/userSearchModal";
 @import "blocks/video";
 @import "blocks/welcome";
 

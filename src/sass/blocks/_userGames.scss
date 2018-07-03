@@ -1,0 +1,31 @@
+.userGames {
+	$gutter: 16px;
+
+	&__loading {
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+	}
+
+	&__empty {
+		margin-top: 40px;
+		opacity: 0.5;
+		font-size: 14px;
+		text-align: center;
+	}
+
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: calc(20px - #{$gutter});
+		margin-top: 36px;
+		margin-right: 16px;
+	}
+
+	&__item {
+		width: calc(25% - #{$gutter});
+		margin-left: $gutter;
+		margin-bottom: $gutter;
+		flex: 0 0 auto;
+	}
+}

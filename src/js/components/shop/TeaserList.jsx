@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Swiper from 'react-id-swiper';
-import MockObject from '../../mock/MockObject';
 import Teaser from './Teaser';
 import Icon from '../icons/Icon';
+import Game from '../../app/Game';
 
 const propTypes = {
-	games: PropTypes.arrayOf(PropTypes.instanceOf(MockObject)),
+	games: PropTypes.arrayOf(PropTypes.instanceOf(Game)),
 	onlyImage: PropTypes.bool,
-	// eslint-disable-next-line
 	onGameClick: PropTypes.func,
-	// eslint-disable-next-line
 	onAddToCart: PropTypes.func,
 	icon: PropTypes.string,
 	title: PropTypes.string,
+	display: PropTypes.oneOf(['grid', 'row']),
 };
 
 const defaultProps = {
@@ -23,6 +22,7 @@ const defaultProps = {
 	onAddToCart: null,
 	icon: null,
 	title: null,
+	display: 'row',
 };
 
 // games, onlyImage, onGameClick, onAddToCart;
@@ -30,8 +30,9 @@ function TeaserList(props) {
 	const swiperParams = {
 		slidesPerView: 'auto',
 		spaceBetween: 22,
-		wrapperClass: 'streamList__list',
+		wrapperClass: 'streamList__row',
 	};
+
 	const teasers = props.games.map(game => {
 		const handleGameClick = () => {
 			if (props.onGameClick) {
@@ -52,6 +53,20 @@ function TeaserList(props) {
 		);
 	});
 
+	let content;
+
+	if (props.display === 'row') {
+		content = <Swiper {...swiperParams}>{teasers}</Swiper>;
+	} else {
+		content = (
+			<div className="streamList__grid">
+				<div className="streamList__gridContainer">
+					{teasers}
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="streamList">
 			{props.title &&
@@ -61,7 +76,7 @@ function TeaserList(props) {
 						<h2 className="streamList__title-text">{props.title}</h2>
 					</div>
 				)}
-			<Swiper {...swiperParams}>{teasers}</Swiper>
+			{content}
 		</div>
 	);
 }

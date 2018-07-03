@@ -1,11 +1,13 @@
 .appSettings {
   width: 100%;
+  box-shadow: -10px 0px 45px -15px rgba(0, 0, 0, 0.75);
   &__user {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 17px 18px;
     color: $dark-cyan;
+    height: 73px;
     &-alias {
       font-size: 12px;
       margin-top: 5px;

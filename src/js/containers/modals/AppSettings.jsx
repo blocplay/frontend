@@ -4,9 +4,10 @@ import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import UI from '../../app/UI';
 import Component from '../../components/modals/AppSettings';
-import currentUser from '../../mock/currentUser';
+import Authentication from '../../app/Authentication';
+import Config from '../../app/Config';
 
-@inject('ui')
+@inject('ui', 'auth', 'config')
 @observer
 class AppSettings extends ReactComponent {
 	static propTypes = {
@@ -26,13 +27,33 @@ class AppSettings extends ReactComponent {
 	@observable
 	modalOpened = false;
 
+	@observable
+	loading = false;
+
+	/**
+	 * User reference, see README.md
+	 * @type {User}
+	 */
+	user;
+
 	componentWillMount() {
 		this.didMount = false;
 		this.registerAsSettingsHandler();
+		this.user = this.props.auth.getUser();
+		this.loadUser();
 	}
 
 	componentDidMount() {
 		this.didMount = true;
+	}
+
+	loadUser() {
+		this.loading = true;
+		const attributes = this.props.config.get('userAttributes.appSettings');
+		this.user.fill(attributes)
+			.then(() => {
+				this.loading = false;
+			});
 	}
 
 	/**
@@ -41,6 +62,11 @@ class AppSettings extends ReactComponent {
 	 */
 	handleShowSettings = (show) => {
 		this.modalOpened = show;
+	};
+
+	handleLogOut = () => {
+		this.props.auth.logout();
+		this.props.ui.router.goTo('/welcome/login');
 	};
 
 	registerAsSettingsHandler() {
@@ -79,8 +105,10 @@ class AppSettings extends ReactComponent {
 				parentSelector={() => modalLocation}
 				onClose={this.handleClose}
 				onRequestClose={this.handleClose}
-				user={currentUser}
+				user={this.user}
+				loading={this.loading}
 				onAddTokensClick={this.handleAddTokensClick}
+				onLogOut={this.handleLogOut}
 			/>
 		);
 	}
@@ -89,6 +117,8 @@ class AppSettings extends ReactComponent {
 // Injected props
 AppSettings.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
+	config: PropTypes.instanceOf(Config).isRequired,
 };
 
 export default AppSettings;

@@ -1,30 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import numeral from 'numeral';
 import moment from 'moment';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import MockObject from '../../mock/MockObject';
 import Avatar from '../user/Avatar';
 import Icon from '../icons/Icon';
 import ProgressBar from '../ProgressBar';
 import SectionTabs from '../navigation/SectionTabs';
 import ScrollableView from '../ScrollableView';
+import User from '../../app/User';
+import Loading from '../Loading';
+import { formatWei } from '../../app/utils';
 
-function renderTimeParticule(nb) {
+function renderTimeParticle(nb) {
 	return `${nb < 10 ? '0' : ''}${nb}`;
 }
 
 @observer
 class ProfilePreview extends Component {
 	static propTypes = {
-		user: PropTypes.instanceOf(MockObject).isRequired,
+		user: PropTypes.instanceOf(User).isRequired,
+		loading: PropTypes.bool,
 		external: PropTypes.bool,
 		sectionTabs: PropTypes.arrayOf(PropTypes.object),
 		onWatchStreamClick: PropTypes.func,
 	};
 
 	static defaultProps = {
+		loading: false,
 		external: false,
 		sectionTabs: [],
 		onWatchStreamClick: null,
@@ -39,7 +42,7 @@ class ProfilePreview extends Component {
 
 	updateTimer = null;
 
-	componentWillMount() {
+	componentDidMount() {
 		this.setStreamTimer();
 	}
 
@@ -119,11 +122,11 @@ class ProfilePreview extends Component {
 		return (
 			<div className="profilePreview__stream activities__card card__small">
 				<div className="activities__meta">
-					<img className="stream__gameTag-thumbnail" src={stream.game.medias.cover} alt={stream.game.name}/>
+					<img className="stream__gameTag-thumbnail" src={stream.game.images.cover.url} alt={stream.game.name}/>
 					<div className="activities__text">
 						<div>Playing {stream.game.name}</div>
 						<div className="profilePreview__stream-description">{stream.game.publisher}</div>
-						<div className="profilePreview__stream-clock"><Icon icon="clock"/>{`${renderTimeParticule(hours)}:${renderTimeParticule(minutes)}:${renderTimeParticule(seconds)}`}</div>
+						<div className="profilePreview__stream-clock"><Icon icon="clock"/>{`${renderTimeParticle(hours)}:${renderTimeParticle(minutes)}:${renderTimeParticle(seconds)}`}</div>
 					</div>
 					<button className="profilePreview__stream-watch btn cart__remove" onClick={this.props.onWatchStreamClick}><Icon icon="eye"/>Watch</button>
 				</div>
@@ -131,11 +134,19 @@ class ProfilePreview extends Component {
 		);
 	}
 
-	render() {
-		const { user } = this.props;
+	renderLoading() {
+		return (
+			<div className="profilePreview__loading">
+				<Loading />
+			</div>
+		);
+	}
+
+	renderContent() {
+		const user = this.props.user;
 
 		return (
-			<ScrollableView className="profilePreview">
+			<Fragment>
 				<div className="profilePreview__head">
 					<div className="profilePreview__avatar">
 						<Avatar user={user}/>
@@ -151,7 +162,7 @@ class ProfilePreview extends Component {
 				<div className="profilePreview__details">
 					<div className="profilePreview__details-item profilePreview__balance">
 						<Icon icon="tokenplay"/>
-						{numeral(user.tokenBalance).format('0,0')} Tokens Available
+						{formatWei(user.tokenBalance)} Tokens Available
 					</div>
 					<div className="profilePreview__details-item profilePreview__language">
 						<Icon icon="globe"/>
@@ -161,6 +172,16 @@ class ProfilePreview extends Component {
 						<Icon icon="info-circle"/>&quot;{user.motto}&quot;
 					</div>
 				</div>
+			</Fragment>
+		)
+	}
+
+	render() {
+		const content = this.props.loading ? this.renderLoading() : this.renderContent();
+
+		return (
+			<ScrollableView className="profilePreview">
+				{content}
 			</ScrollableView>
 		);
 	}

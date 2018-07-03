@@ -1,7 +1,7 @@
 import React, { Component as ReactComponent } from 'react';
 import { inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { pick } from 'underscore';
+import pick from 'lodash/pick';
 import Component from '../components/navigation/AppTabs';
 import UI from '../app/UI';
 
@@ -13,13 +13,13 @@ const routes = [
 		title: 'Home',
 		icon: 'home',
 	},
-	{
-		id: 'shop',
-		match: '/dashboard/shop',
-		path: '/dashboard/shop/index',
-		title: 'Shop',
-		icon: 'shopping-cart',
-	},
+	// {
+	// 	id: 'shop',
+	// 	match: '/dashboard/shop',
+	// 	path: '/dashboard/shop/index',
+	// 	title: 'Shop',
+	// 	icon: 'shopping-cart',
+	// },
 	{
 		id: 'messages',
 		match: '/dashboard/messages',
@@ -27,13 +27,13 @@ const routes = [
 		title: 'Messages',
 		icon: 'envelope',
 	},
-	{
-		id: 'live',
-		match: '/dashboard/live',
-		path: '/dashboard/live/index',
-		title: 'Live',
-		icon: 'video',
-	},
+	// {
+	// 	id: 'live',
+	// 	match: '/dashboard/live',
+	// 	path: '/dashboard/live/index',
+	// 	title: 'Live',
+	// 	icon: 'video',
+	// },
 ];
 
 @inject('ui')
@@ -55,7 +55,7 @@ class AppTabs extends ReactComponent {
 
 	getTabs() {
 		return routes.map(route => ({
-			...pick(route, 'id', 'title', 'icon'),
+			...pick(route, ['id', 'title', 'icon']),
 			isActive: this.isRouteActive(route),
 			callback: this.handleTabClick(route),
 		}));

@@ -1,11 +1,26 @@
 /**
- * Class responsible of the data of the application. This class has NO KNOWLEDGE of the visual UI.
- * The visual interface is managed by the UI class. The UI class has a reference to this App class
- * to trigger data updates (fetching, loging, messaging, ...) but the App class has NO reference to
- * the UI class.
+ * ======================
+ * ======================
+ * ======================
+ * DO NOT USE THIS CLASS, IT WILL BE REMOVED!!!!
+ * If you need to have instances that should be shared throughout the app,
+ * use "services" instead (see config.js)
+ * ======================
+ * ======================
+ * ======================
  */
 class Application {
-
+	/**
+	 * @type {DownloadManager}
+	 */
+	downloadManager = null;
+	
+	/**
+	 * @param {DownloadManager} downloadManager
+	 */
+	constructor(downloadManager) {
+		this.downloadManager = downloadManager;
+	}
 }
 
 export default Application;

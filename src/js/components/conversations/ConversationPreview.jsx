@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import ConversationInstance from '../../mock/MockObject';
+import ConversationModel from '../../app/Conversation';
 import Avatar from '../user/Avatar';
 import MultiAvatars from '../user/MultiAvatars';
 import Swipeout from '../Swipeout';
@@ -12,7 +12,7 @@ const STATUS_MAX_LENGTH = 30;
 @observer
 class Conversation extends Component{
 	static propTypes = {
-		conversation: PropTypes.instanceOf(ConversationInstance).isRequired,
+		conversation: PropTypes.instanceOf(ConversationModel).isRequired,
 		active: PropTypes.bool,
 		onClick: PropTypes.func,
 		onFavouriteClick: PropTypes.func,
@@ -34,26 +34,26 @@ class Conversation extends Component{
 		const { conversation } = this.props;
 
 		if (this.isSingleUser()) {
-			return conversation.users[0].username;
+			return conversation.users[0].displayName;
 		}
 
-		return conversation.title;
+		if (conversation.title) {
+			return conversation.title;
+		}
+
+		return conversation.users.map(user => user.displayName).join(', ');
 	}
 
 	getStatus() {
-		const { entries } = this.props.conversation.history;
-
-		if (!entries.length) {
-			return null;
+		const latestMessage = this.props.conversation.latestMessage;
+		if (typeof latestMessage === 'string' && latestMessage.length) {
+			if (latestMessage.length > STATUS_MAX_LENGTH) {
+				return `${latestMessage.substring(0, STATUS_MAX_LENGTH)} ...`;
+			}
+			return latestMessage;
 		}
 
-		const status = entries[entries.length - 1].data.content;
-
-		if (status.length > STATUS_MAX_LENGTH) {
-			return `${status.substring(0, STATUS_MAX_LENGTH)} ...`;
-		}
-
-		return status;
+		return null;
 	}
 
 	getSwipeoutProps() {

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin({
@@ -22,11 +23,16 @@ const devServer = {
 	historyApiFallback: true,
 	port: 3000,
 };
+
+const devEnvPath = path.resolve(__dirname, '../etc/env.dev.js');
+const stubDLMngrPath = path.resolve(__dirname, '../src/brwc/DownloadManager.stub.js');
+
 module.exports = {
 	// ...the rest of your config
 	devServer,
 	entry: [
 		'react-hot-loader/patch',
+		'whatwg-fetch', // window.fetch polyfill
 		path.resolve(__dirname, '../index.web.js'),
 		path.resolve(__dirname, '../src/sass/app.scss'),
 	],
@@ -57,6 +63,28 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('development'),
 		}),
+		// If a custom env.dev.js file exists, we replace etc/env.js imports with it (it will
+		// replace it, not
+		// merge it; if you need to merge, do it in the env.dev.js file itself)
+		new webpack.NormalModuleReplacementPlugin(
+			/etc\/env(\.js)?$/,
+			(resource) => {
+				if (fs.existsSync(devEnvPath)) {
+					resource.request = devEnvPath;
+				}
+			}
+		),
+		// We replace DownloadManager.js imports to DownloadManager.stub.js
+		// 
+		new webpack.NormalModuleReplacementPlugin(
+			/brwc\/DownloadManager(\.js)?$/,
+			(resource) => {
+				if (fs.existsSync(stubDLMngrPath)) {
+					resource.request = stubDLMngrPath;
+				}
+			}
+		),
+
 	],
 	resolve: {
 		// If you're working on a multi-platform React Native app, web-specific

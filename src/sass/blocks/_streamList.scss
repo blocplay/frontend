@@ -1,4 +1,6 @@
 .streamList {
+  $grid-gap: 22px;
+
   padding-left: 16px;
   // Accomodates swiper
   width: 100%;
@@ -33,14 +35,27 @@
       }
     }
   }
-  &__list {
+  &__row {
     position: relative;
     width: 100%;
     height: 100%;
     display: flex;
+    .streamList__item {
+        flex: 0 0 402px;
+      }
   }
-  &__item {
-    flex: 0 0 402px;
+  &__grid {
+    padding-right: 14px;
+  }
+  &__gridContainer {
+    $nb-cols: 3;
+    margin-right: -$grid-gap;
+    display: flex;
+    flex-wrap: wrap;
+    .streamList__item {
+      flex: 0 0 calc(#{100% / $nb-cols} - #{$grid-gap});
+      margin: 0 $grid-gap $grid-gap 0;
+    }
   }
 }
 

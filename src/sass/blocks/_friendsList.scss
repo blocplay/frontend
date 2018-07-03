@@ -4,11 +4,23 @@ $self: '.friendsList';
   &__list {
     margin: 0 11px 0 24px;
   }
+  &__avatar {
+    margin-right: 20px;
+  }
   &__post {
     margin-left: auto;
   }
-  &__flash {
+  &__header {
+    padding: 18px 20px;
     border-bottom: 1px solid $med-cyan;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
   }
   &__main {
     flex: 1;
@@ -27,12 +39,19 @@ $self: '.friendsList';
     padding: 13px 0;
     border-bottom: 1px solid $med-cyan;
   }
+  &__none {
+    opacity: 0.5;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+  }
 }
 
 .homeFriends {
   #{$self}__avatar {
     margin-left: -10px;
-    margin-right: 20px;
   }
   #{$self}__status {
     font-size: 30px;
@@ -46,14 +65,15 @@ $self: '.friendsList';
 }
 
 .invitations {
-  #{$self}__avatar {
-    margin-right: 20px;
-  }
   #{$self}__post {
-    .icon-plus-circle {
-      fill: $white;
-      width: 16px;
-      margin-right: 10px;
+    .icon {
+      width: 20px;
+      &.icon-plus-circle {
+        fill: $white;
+      }
+      &.icon-times-circle {
+        fill: $live;
+      }
     }
   }
   &__actions {

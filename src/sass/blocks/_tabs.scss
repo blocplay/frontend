@@ -3,8 +3,9 @@
   border-radius: 999px;
   overflow: hidden;
   margin: 36px 13px 0;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 9px;
+  letter-spacing: $letter-spacing;
   text-transform: uppercase;
   &__item {
     $height: 40px;

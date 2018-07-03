@@ -1,10 +1,10 @@
 import React, { Component as ReactComponent } from 'react';
 import PropTypes from 'prop-types';
-import { pick } from 'underscore';
-import { inject, observer } from 'mobx-react';
+import pick from 'lodash/pick';
+import { inject } from 'mobx-react';
 import UI from '../../../app/UI';
+import Authentication from '../../../app/Authentication';
 import Component from '../../../components/screens/groups/Home';
-import currentUser from '../../../mock/currentUser';
 
 const tabs = [
 	{ id: 'games', path: '/dashboard/home/games', title: 'Games', icon:'gamepad' },
@@ -15,8 +15,7 @@ const tabs = [
 	{ id: 'trophies', path: '/dashboard/home/trophies', title: 'Trophies', icon:'trophy' },
 ];
 
-@inject('ui')
-@observer
+@inject('ui', 'auth')
 class Home extends ReactComponent {
 	static propTypes = {
 		children: PropTypes.element.isRequired,
@@ -24,9 +23,19 @@ class Home extends ReactComponent {
 	};
 	static defaultProps = {};
 
+	/**
+	 * User reference, see README.md
+	 * @type {User}
+	 */
+	user;
+
+	componentWillMount() {
+		this.user = this.props.auth.getUser();
+	}
+
 	getSectionTabs() {
 		return tabs.map(tab => ({
-			...pick(tab, 'id', 'title', 'icon'),
+			...pick(tab, ['id', 'title', 'icon']),
 			isActive: this.isTabActive(tab),
 			callback: this.handleTabClick(tab),
 		}));
@@ -50,7 +59,7 @@ class Home extends ReactComponent {
 		return (
 			<Component
 				sectionTabs={this.getSectionTabs()}
-				currentUser={currentUser}
+				currentUser={this.user}
 				onSettingsClick={this.handleSettingsClick}
 			>
 				{ this.props.children }
@@ -62,6 +71,7 @@ class Home extends ReactComponent {
 // Injected props
 Home.wrappedComponent.propTypes = {
 	ui: PropTypes.instanceOf(UI).isRequired,
+	auth: PropTypes.instanceOf(Authentication).isRequired,
 };
 
 export default Home;

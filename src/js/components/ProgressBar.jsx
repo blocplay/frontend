@@ -15,7 +15,7 @@ function ProgressBar(props) {
 	return (
 		<div className={`progressBar__container${props.text ? ' progressBar__container--text' : ''}`}>
 			<meter className="progressBar" value={props.value * 100} min="0" max="100" />
-			{props.text && <div className="progressBar__text">{props.value * 100}%</div>}
+			{props.text && <div className="progressBar__text">{Math.round((props.value * 100) * 100) / 100}%</div>}
 		</div>
 	);
 }

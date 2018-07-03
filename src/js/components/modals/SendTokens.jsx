@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
-import { omit } from 'underscore';
+import omit from 'lodash/omit';
 import numeral from 'numeral';
 import MockObject from '../../mock/MockObject';
 
@@ -126,7 +126,7 @@ class SendTokens extends Component {
 
 	render() {
 		const modalProps = {
-			...omit(this.props, 'toUser', 'isCurrentUser', 'onSend', 'initialAmount'),
+			...omit(this.props, ['toUser', 'isCurrentUser', 'onSend', 'initialAmount']),
 			ariaHideApp: false,
 			portalClassName: 'modal sendTokensModal',
 			overlayClassName: 'modal__overlay sendTokensModal__overlay',

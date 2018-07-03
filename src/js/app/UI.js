@@ -1,14 +1,23 @@
-import { observable } from 'mobx';
+import IoC from '@aedart/js-ioc';
+import { autorun, observable } from 'mobx';
 import Router from './Router';
 
 /**
- * Main class in charge of the UI. Do not mix the responsabilities of the UI class and the App
- * class. The former is responsible for everything related to the visual UI and interaction with the
- * user. The App class has absolutely no knowledge of the UI and is reponsible of data (fetching,
- * user, messaging, ...). The UI has a reference to the App to trigger data updates, but the App
- * does NOT have a reference to the UI.
+ * Main class in charge of the UI. When starting, the UI will pass through different states:
+ * - STATE_CREATED: the UI is created
+ * - STATE_INITIALIZED: after `init()` was successfully called
+ * - STATE_LOADING: The UI is currently waiting for all app data to load
+ * - STATE_READY: all data was loaded and the main app UI is ready to be displayed
  */
 class UI {
+	/**
+	 * Different state of the
+	 */
+	static STATE_CREATED = 'created';
+	static STATE_INITIALIZED = 'initialized';
+	static STATE_LOADING = 'loading';
+	static STATE_READY = 'ready';
+
 	/**
 	 * @type {Application}
 	 */
@@ -41,6 +50,19 @@ class UI {
 	 */
 	@observable
 	modalLocations = new Map();
+	/**
+	 * Current state of the UI
+	 * @type {null|string}
+	 */
+	@observable
+	state = UI.STATE_CREATED;
+
+	/**
+	 * Internal property to keep the last logged in state of the user. Used to compare to when the
+	 * authentication state changes.
+	 * @type {boolean}
+	 */
+	loggedIn = false;
 
 	/**
 	 * @param {Application} application
@@ -57,10 +79,50 @@ class UI {
 
 		this.initStores();
 		this.router.init();
+		this.state = UI.STATE_INITIALIZED;
 	}
 
+	/**
+	 * Starts the UI
+	 */
+	start() {
+		this.watchAuthentication();
+	}
+
+	/**
+	 * When the user gets logged out (once the UI is in the 'ready' state), we redirect to the login
+	 * screen.
+	 */
+	watchAuthentication() {
+		/** @type {Authentication} */
+		const auth = IoC.make('auth');
+		autorun(() => {
+			if (this.state !== UI.STATE_READY) {
+				return;
+			}
+
+			if (this.loggedIn && !auth.isAuthenticated()) {
+				this.router.goTo('/welcome/login');
+			}
+
+			this.loggedIn = auth.isAuthenticated();
+		});
+	}
+
+	/**
+	 * Initializes the store attributes that components will be able to access with @inject
+	 */
 	initStores() {
-		this.stores.ui = this;
+		this.stores = {
+			ui: this,
+			auth: IoC.make('auth'),
+			config: IoC.make('config'),
+			conversationRepository: IoC.make('conversationRepository'),
+			userRepository: IoC.make('userRepository'),
+			gameRepository: IoC.make('gameRepository'),
+			friendRequestRepository: IoC.make('friendRequestRepository'),
+			eStore: IoC.make('eStore'),
+		};
 	}
 
 	/**
@@ -122,6 +184,17 @@ class UI {
 	 */
 	registerAppSettingsHandler(handler) {
 		this.appSettingsHandler = handler;
+	}
+
+	/**
+	 * Calling this function will put the UI in "loading" mode (will set the `state` attribute to
+	 * STATE_LOADING). The `loader` parameter is a Promise object representing the loading process.
+	 * When it resolves, the `state` is set to STATE_READY.
+	 * @param {Promise} loader
+	 */
+	loading(loader) {
+		this.state = UI.STATE_LOADING;
+		loader.then(() => { this.state = UI.STATE_READY; });
 	}
 }
 

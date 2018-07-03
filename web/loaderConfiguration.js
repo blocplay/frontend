@@ -17,6 +17,9 @@ const babelLoaderConfiguration = {
 				'transform-decorators-legacy',
 				'transform-object-rest-spread',
 				'transform-class-properties',
+				['babel-plugin-transform-builtin-extend', {
+					globals: ['Error', 'Array'],
+				}],
 			],
 			presets: [
 				'react',

@@ -1,0 +1,24 @@
+.loading {
+	width: 40px;
+	height: 40px;
+	animation: loading-spin 0.9s infinite linear;
+
+	// SVG
+	path {
+		fill: $white;
+	}
+
+	&--small {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+@keyframes loading-spin {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

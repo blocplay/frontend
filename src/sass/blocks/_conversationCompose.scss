@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
+  position: relative;
   @include icon($white);
   background-color: $off-black;
   .icon {
@@ -18,5 +19,32 @@
   input {
     background: $compose-input;
     flex: 1 1;
+  }
+
+  &__emojisSelector {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    background-color: $off-black;
+    padding: 15px;
+  }
+
+  &__emojis {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__emojiItem {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $med-cyan;
+    }
   }
 }

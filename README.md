@@ -1,5 +1,5 @@
-#Updated
-Date: July 3, 2018
+Updated Date: July 3, 2018
+
 Internal Bitbucket CL #dbac355
 
 # TokenPlay Frontend

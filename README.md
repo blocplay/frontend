@@ -1,6 +1,6 @@
 Update: July 3, 2018
 
-Internal Bitbucket Commit: #dbac355
+[Change Log](CHANGELOG.md)
 
 # TokenPlay Frontend
 TokenPlay ElectronJS, React based Frontend

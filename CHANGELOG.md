@@ -90,7 +90,7 @@ e9e6acb - phoenixSocket: logging or not can be set in the config
 
 c652686 - updated avatar url paths to work in electron. added real tokenplay packages thought the other info is for other games.
 
-08d65ab - Merge branch 'master' of https://bitbucket.org/thejibe/tokenplay into feature/brwc-integration
+08d65ab - Merge branch 'master' of  into feature/brwc-integration
 
 e176e37 - fixed issue with progress bar/download text states when switch screens or tabs.
 
@@ -136,7 +136,7 @@ f95c272 - Minor styling fixes and refactor
 
 6e99d71 - Moved DownloadManager to brwc folder, add DownloadManager.dev.js as a class stub. Added a dev config for properly building the web target.
 
-3c8bae2 - Merge branch 'master' of https://bitbucket.org/thejibe/tokenplay into feature/brwc-integration
+3c8bae2 - Merge branch 'master' of  into feature/brwc-integration
 
 2292834 - updated BRWC binary. changed BrowserWindow to a bigger size.
 
@@ -226,7 +226,7 @@ c7d7161 - Friends, friend requests, user games and conversations: always reload 
 
 da6794b - Loading functions clear their cache before reloading
 
-331244e - Merge branch 'master' of https://bitbucket.org/thejibe/tokenplay into feature/brwc-integration
+331244e - Merge branch 'master' of  into feature/brwc-integration
 
 07a0897 - reverted back env.js to original code.
 
@@ -244,7 +244,7 @@ d62186f - Added logic on when to display download text, progress bar, and icon c
 
 f9a6337 - added back js-cookie dependency. added ignore on dist folder
 
-272555e - Merge branch 'master' of https://bitbucket.org/thejibe/tokenplay into feature/brwc-integration
+272555e - Merge branch 'master' of  into feature/brwc-integration
 
 ddd7283 - mockData: used default profile values.
 

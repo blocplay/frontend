@@ -1,6 +1,6 @@
 Update: July 3, 2018
 
-Internal Bitbucket CL: #dbac355
+Internal Bitbucket Commit: #dbac355
 
 # TokenPlay Frontend
 TokenPlay ElectronJS, React based Frontend
@@ -26,7 +26,7 @@ The Decentralized App ("Dapp") consists of the following core components:
 - Wallet
 
 ## Alpha Interface
-![TokenPlay Interface](screen/screen1.PNG)
+![TokenPlay Interface](screens/screen1.PNG)
 
 # Online Demo
 [TokenPlay Demo](http://demo.tokenplay.com)

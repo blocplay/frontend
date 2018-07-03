@@ -1,6 +1,6 @@
-Updated Date: July 3, 2018
+Update: July 3, 2018
 
-Internal Bitbucket CL #dbac355
+Internal Bitbucket CL: #dbac355
 
 # TokenPlay Frontend
 TokenPlay ElectronJS, React based Frontend

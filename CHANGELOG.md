@@ -508,7 +508,7 @@ abd171b - Friend requests: added models, repository and related config
 
 ec3d668 - Conversation: update to the AppBar to use the ConversationRepository
 
-9d7afab - Conversation message component: now displayed in a <pre> to preserve line breaks
+9d7afab - Conversation message component: now displayed in a pre to preserve line breaks
 
 6a63c76 - Updated sample env.dev and mockData
 
@@ -882,17 +882,17 @@ c8693be - Merge stashed live changes to incoming master changes
 
 2968f91 - Merge branch 'master'
 
-a2301d5 - live/stream/:id: now has a 'back' button in the app bar
+a2301d5 - live/stream/id: now has a 'back' button in the app bar
 
-b4da0ad - live/stream/:id: can now be full screen
+b4da0ad - live/stream/id: can now be full screen
 
-e3430bb - live/stream/:id: 'View Comments' button and modal now working
+e3430bb - live/stream/id: 'View Comments' button and modal now working
 
 a684157 - converstations/MessageInput (component): submits the message when pressing 'Enter'
 
 44c2290 - Merge branch 'master' into styling/nav
 
-2f7202e - PanelModal created dashboard/live/stream/:id: layout components created (not finished), with the "show viewers" modal
+2f7202e - PanelModal created dashboard/live/stream/id: layout components created (not finished), with the "show viewers" modal
 
 3cb2476 - appBar/Back (component): now has an arrow that can be displayed
 
